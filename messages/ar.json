@@ -1,3 +1,14 @@
 {
-  "_scaffold": "Scaffold placeholder — real copy lands in step 10."
+  "nav": {
+    "work": "أعمالنا",
+    "about": "من نحن",
+    "contact": "تواصل",
+    "cta": "احجز مكالمة"
+  },
+  "footer": {
+    "rights": "نَشْر. جميع الحقوق محفوظة.",
+    "privacy": "الخصوصية",
+    "terms": "الشروط",
+    "vat": "ضريبة القيمة المضافة"
+  }
 }

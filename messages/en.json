@@ -1,3 +1,14 @@
 {
-  "_scaffold": "Scaffold placeholder — real copy lands in step 10."
+  "nav": {
+    "work": "Work",
+    "about": "About",
+    "contact": "Contact",
+    "cta": "Book a call"
+  },
+  "footer": {
+    "rights": "NASHR. All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "vat": "Saudi VAT"
+  }
 }
