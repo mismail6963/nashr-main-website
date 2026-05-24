@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "work": "Work",
+    "about": "About",
+    "contact": "Contact",
+    "cta": "Book a call"
+  },
+  "hero": {
+    "eyebrow": "RIYADH · BILINGUAL WEB STUDIO",
+    "headlineLines": [
+      "Websites Saudi",
+      "businesses",
+      "actually",
+      "need."
+    ],
+    "accentLineIndex": 2,
+    "sub": "We design and build bilingual websites — Arabic and English, mobile-first, made for how your customers actually browse, message, and book. One-time fee. You own the work.",
+    "ctaPrimary": "Book a free consultation",
+    "ctaSecondary": "See how we work",
+    "trust": [
+      "OWN YOUR DOMAIN",
+      "OWN YOUR CODE",
+      "NO RETAINERS",
+      "2–4 REVISION ROUNDS"
+    ],
+    "scroll": "SCROLL"
+  },
+  "what": {
+    "label": "WHAT IS NASHR",
+    "headline": "A small studio that builds the website your business deserves.",
+    "intro1": "NASHR is a bilingual web design studio based in Riyadh. We build custom websites for Saudi businesses — restaurants, clinics, salons, contractors, professional services — that have been losing customers because they have no website, or a website that doesn't work hard enough for them.",
+    "intro2": "We are not a large agency. We're a small team that cares about craft, and that means every site we ship is built from scratch around your business, your customers, and how Saudi Arabia actually buys in 2026.",
+    "stats": [
+      { "value": 96, "suffix": "%", "label": "of Saudi adults use WhatsApp daily" },
+      { "value": 78, "suffix": "%", "label": "of Saudi customers search online before visiting a business" },
+      { "value": 1, "suffix": "×", "label": "one-time fee. No monthly retainers. Ever." }
+    ]
+  },
+  "how": {
+    "label": "HOW WE WORK",
+    "headline": "Six steps. No surprises. You stay in control the whole way.",
+    "steps": [
+      { "num": "01", "title": "First contact", "body": "A call, a WhatsApp message, an email, or a visit. Whichever way works for you. We listen first." },
+      { "num": "02", "title": "Free mockup call", "body": "We sit down — in person or on a call — walk through your business, and show you a free design mockup of what your site could look like. No payment, no commitment." },
+      { "num": "03", "title": "Scope & estimate", "body": "Once we both understand what you need, we confirm the scope and give you a clear price estimate. Custom — not a fixed package." },
+      { "num": "04", "title": "Agreement & deposit", "body": "We sign a short Letter of Engagement and you pay a 25% deposit. Work begins immediately." },
+      { "num": "05", "title": "Build & revise", "body": "We design, build, and refine. You get 2–4 rounds of revisions, included — no surprise charges, no nickel-and-diming." },
+      { "num": "06", "title": "Launch & handover", "body": "Final payment, full IP transfer to you, and we publish your site on a domain you own. The work is yours, forever." }
+    ],
+    "handover": {
+      "labels": { "you": "YOU PROVIDE", "us": "NASHR HANDLES" },
+      "youProvide": [
+        "Your logo",
+        "Your content & info",
+        "Approvals on rounds",
+        "Final sign-off"
+      ],
+      "nashrHandles": [
+        "Design & UX",
+        "Build & code",
+        "Copywriting polish",
+        "Hosting & launch",
+        "Bilingual setup (AR/EN)",
+        "SEO foundations"
+      ]
+    }
+  },
+  "help": {
+    "label": "WHAT WE BUILD",
+    "headline": "Everything your customers expect — in Arabic, in English, on every screen.",
+    "sub": "Pick what you need. We'll tell you honestly what your business actually requires — not what makes our invoice bigger.",
+    "cards": [
+      { "title": "Bilingual by default", "body": "Real Arabic RTL and English LTR, with a one-tap toggle. Arabic-first — not Google-translated." },
+      { "title": "Mobile-first build", "body": "Most of your customers will see your site on a phone. We design for that screen first, then scale up." },
+      { "title": "WhatsApp integration", "body": "One-tap WhatsApp on every page. Customers enquire the way Saudi Arabia already messages — instantly." },
+      { "title": "Online booking", "body": "Direct booking via Cal.com or a custom system. Service, time slot, doctor or stylist — handled." },
+      { "title": "Google Maps & local SEO", "body": "Map embedded, hours, directions, and the foundations to show up when customers search nearby." },
+      { "title": "AI chat assistant", "body": "A 24/7 chatbot that answers FAQs, prices, hours, and triages enquiries. Optional add-on." },
+      { "title": "Services & team pages", "body": "Dedicated pages for each service and each doctor, stylist, or team member — with direct CTAs." },
+      { "title": "FAQ with search", "body": "A searchable FAQ that cuts incoming phone calls and increases booking confidence." },
+      { "title": "You own everything", "body": "Custom domain, SSL, full IP transfer on final payment. Your site, your code, your future." }
+    ],
+    "disclaimer": "PRICES ARE CUSTOM PER PROJECT — TYPICALLY SAR 3,000 TO SAR 40,000+ DEPENDING ON SCOPE"
+  },
+  "contact": {
+    "label": "GET IN TOUCH",
+    "headlineLines": ["Three ways in.", "No forms."],
+    "accentLineIndex": 1,
+    "sub": "Pick the channel you already use. We answer fast in both Arabic and English.",
+    "tiles": [
+      { "channel": "Book a call", "body": "A 20-minute free consultation. We look at your business and tell you honestly what would help.", "cta": "Open" },
+      { "channel": "WhatsApp us", "body": "The fastest way. Send us a message, we usually reply within an hour during business hours.", "cta": "Open" },
+      { "channel": "Email", "body": "If you'd rather write. We reply within one business day, always.", "cta": "Open" }
+    ],
+    "meta": "RIYADH, KSA · NASHR.SA · @NASHR.STUDIO"
+  },
+  "footer": {
+    "rights": "NASHR. All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "vat": "Saudi VAT"
+  }
+}

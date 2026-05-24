@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------- *
+ * NASHR — design tokens
+ * Colors are CSS variables so we never lose contrast across nesting.
+ * ---------------------------------------------------------------- */
+
+@theme {
+  /* Surfaces */
+  --color-bg: #07101c;
+  --color-bg-elevated: #0c1a2a;
+  --color-bg-card: #0f2236;
+  --color-navy: #0c243c;
+  /* Brand */
+  --color-gold: #a48f60;
+  --color-gold-bright: #d4b872;
+  /* Text */
+  --color-fg: #f2efe8;
+  --color-fg-muted: #8a95a4;
+  --color-fg-faint: #4a5567;
+
+  /* Fonts (wired to next/font CSS variables) */
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-arabic: var(--font-arabic);
+
+  /* Fluid type scale */
+  --text-display: clamp(56px, 9vw, 144px);
+  --text-h1: clamp(40px, 5.5vw, 80px);
+  --text-h2: clamp(28px, 3.2vw, 48px);
+  --text-body-lg: clamp(17px, 1.3vw, 20px);
+}
+
+:root {
+  --bg: #07101c;
+  --bg-elevated: #0c1a2a;
+  --bg-card: #0f2236;
+  --surface-line: rgba(164, 143, 96, 0.10);
+  --navy: #0c243c;
+  --gold: #a48f60;
+  --gold-bright: #d4b872;
+  --gold-soft: rgba(164, 143, 96, 0.16);
+  --fg: #f2efe8;
+  --fg-muted: #8a95a4;
+  --fg-faint: #4a5567;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  background: var(--bg);
+  color: var(--fg);
+  scrollbar-gutter: stable;
+}
+
+html[dir="rtl"] body {
+  font-family: var(--font-arabic), system-ui, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Mono elements stay LTR even in RTL layouts (numerals like 01 / WHAT IS NASHR) */
+[dir="rtl"] .force-ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* Selection */
+::selection {
+  background: var(--gold-soft);
+  color: var(--fg);
+}
+
+/* Focus ring — 2px gold offset 2px, applied via .focus-ring or :focus-visible */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Lenis smooth scroll — required reset */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* Reduced motion: kill drift + parallax + counters animation hooks */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .motion-drift,
+  .motion-parallax {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* Utility: hide native cursor on hover-capable devices (custom cursor takes over) */
+@media (hover: hover) and (pointer: fine) {
+  html.cursor-active,
+  html.cursor-active * {
+    cursor: none !important;
+  }
+}
+
+/* Skip link */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 20px;
+  background: var(--gold);
+  color: var(--navy);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  z-index: 9999;
+  transition: top 200ms var(--ease-out-expo);
+}
+.skip-link:focus {
+  top: 16px;
+}
