@@ -82,6 +82,18 @@
     ],
     "disclaimer": "PRICES ARE CUSTOM PER PROJECT — TYPICALLY SAR 3,000 TO SAR 40,000+ DEPENDING ON SCOPE"
   },
+  "contact": {
+    "label": "GET IN TOUCH",
+    "headlineLines": ["Three ways in.", "No forms."],
+    "accentLineIndex": 1,
+    "sub": "Pick the channel you already use. We answer fast in both Arabic and English.",
+    "tiles": [
+      { "channel": "Book a call", "body": "A 20-minute free consultation. We look at your business and tell you honestly what would help.", "cta": "Open" },
+      { "channel": "WhatsApp us", "body": "The fastest way. Send us a message, we usually reply within an hour during business hours.", "cta": "Open" },
+      { "channel": "Email", "body": "If you'd rather write. We reply within one business day, always.", "cta": "Open" }
+    ],
+    "meta": "RIYADH, KSA · NASHR.SA · @NASHR.STUDIO"
+  },
   "footer": {
     "rights": "NASHR. All rights reserved.",
     "privacy": "Privacy",

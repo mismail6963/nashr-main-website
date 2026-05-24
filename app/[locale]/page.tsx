@@ -6,6 +6,7 @@ import { Hero } from "@/components/sections/Hero";
 import { SectionWhat } from "@/components/sections/SectionWhat";
 import { SectionHow } from "@/components/sections/SectionHow";
 import { SectionHelp } from "@/components/sections/SectionHelp";
+import { SectionCTA } from "@/components/sections/SectionCTA";
 
 export default async function HomePage({
   params,
@@ -24,7 +25,7 @@ export default async function HomePage({
         <SectionWhat />
         <SectionHow />
         <SectionHelp />
-        <section id="contact" style={{ minHeight: "40vh" }} />
+        <SectionCTA />
       </main>
       <Footer />
     </>
