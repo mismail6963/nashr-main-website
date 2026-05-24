@@ -1,5 +1,3 @@
-"use client";
-
 import { useTranslations } from "next-intl";
 import {
   Languages,
@@ -13,10 +11,9 @@ import {
   ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
-import { SectionLabel } from "@/components/ui/SectionLabel";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { TextReveal } from "@/components/ui/TextReveal";
-import { GlowCard } from "@/components/ui/GlowCard";
+import { SectionRef } from "@/components/ui/SectionRef";
+import { Mono } from "@/components/ui/Mono";
+import { Reveal } from "@/components/motion/Reveal";
 
 type Capability = { title: string; body: string };
 
@@ -34,90 +31,117 @@ const ICONS: LucideIcon[] = [
 
 export function SectionHelp() {
   const t = useTranslations("help");
-  const capabilities = (t.raw("cards") as Capability[]) ?? [];
+  const caps = (t.raw("cards") as Capability[]) ?? [];
 
   return (
-    <section
-      id="help"
-      className="relative px-6 md:px-10"
-      style={{ paddingBlock: "clamp(96px, 12vw, 192px)" }}
-    >
-      <div className="mx-auto max-w-[1280px]">
-        <div className="sticky top-[88px] z-20 -mb-2 w-fit">
-          <SectionLabel number="03" label={t("label")} />
-        </div>
+    <section id="help" className="section-pad below-fold hairline">
+      <div className="container-page">
+        <Reveal>
+          <SectionRef number="3.0" label={t("ref")} />
+        </Reveal>
 
-        <div className="mt-10 md:mt-14">
-          <TextReveal
-            as="h2"
-            text={t("headline")}
-            className="max-w-[24ch] text-[var(--fg)]"
-            style={{
-              fontFamily: "var(--font-display), serif",
-              fontSize: "var(--text-h1)",
-              lineHeight: 1.02,
-              letterSpacing: "-0.02em",
-            }}
-          />
-        </div>
+        <Reveal delay={0.06}>
+          <h2 className="t-h1 mt-10 md:mt-12 max-w-[24ch] text-[var(--fg)]">
+            {t("headline")}
+          </h2>
+        </Reveal>
 
-        <ScrollReveal delay={0.1}>
-          <p
-            className="mt-8 max-w-[60ch] text-[var(--fg-muted)]"
-            style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.6 }}
-          >
+        <Reveal delay={0.1}>
+          <p className="mt-8 t-body-lg text-[var(--fg-secondary)] max-w-[600px]">
             {t("sub")}
           </p>
-        </ScrollReveal>
+        </Reveal>
 
-        {/* 3-col grid (1/2/3) */}
-        <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 md:mt-20">
-          {capabilities.map((cap, i) => {
-            const Icon = ICONS[i] ?? Layers;
-            return (
-              <ScrollReveal
-                key={i}
-                delay={(i % 3) * 0.08 + Math.floor(i / 3) * 0.04}
-              >
-                <GlowCard className="h-full">
+        {/* Structured grid: 1 / 2 / 3 cols. Shared borders via grid lines.
+            Each cell has top border. Left border applied to cols 2+
+            and reset at every row start by ::nth-child. */}
+        <div className="mt-20 md:mt-24">
+          <div
+            className="grid-cells"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(var(--cols, 1), minmax(0, 1fr))",
+            }}
+          >
+            {caps.map((cap, i) => {
+              const Icon = ICONS[i] ?? Layers;
+              return (
+                <Cell key={i} index={i}>
                   <Icon
-                    size={32}
+                    size={20}
                     strokeWidth={1.5}
-                    className="mb-6"
-                    style={{ color: "var(--gold)" }}
+                    style={{ color: "var(--fg-muted)" }}
                     aria-hidden
                   />
-                  <h3
-                    className="mb-3 text-[var(--fg)]"
-                    style={{
-                      fontSize: "20px",
-                      fontWeight: 500,
-                      letterSpacing: "-0.01em",
-                    }}
-                  >
+                  <h3 className="mt-6 t-body-lg font-medium text-[var(--fg)] transition-colors duration-150 cell-title">
                     {cap.title}
                   </h3>
-                  <p
-                    className="text-[var(--fg-muted)]"
-                    style={{ fontSize: "15px", lineHeight: 1.6 }}
-                  >
+                  <p className="mt-3 t-body text-[var(--fg-secondary)]">
                     {cap.body}
                   </p>
-                </GlowCard>
-              </ScrollReveal>
-            );
-          })}
+                </Cell>
+              );
+            })}
+          </div>
+          <style>{`
+            .grid-cells { --cols: 1; }
+            @media (min-width: 768px) { .grid-cells { --cols: 2; } }
+            @media (min-width: 1024px) { .grid-cells { --cols: 3; } }
+            .grid-cells > * {
+              border-top: 1px solid var(--border);
+              padding: 32px 0;
+              padding-inline-end: 24px;
+            }
+            /* All cells get a leading inline border, then we strip it
+               for the first cell of each row using nth-child math. */
+            .grid-cells > * { border-inline-start: 1px solid var(--border); padding-inline-start: 24px; }
+            @media (max-width: 767px) {
+              .grid-cells > *:nth-child(n) { border-inline-start: 0; padding-inline-start: 0; padding-inline-end: 0; }
+            }
+            @media (min-width: 768px) and (max-width: 1023px) {
+              .grid-cells > *:nth-child(2n+1) { border-inline-start: 0; padding-inline-start: 0; }
+            }
+            @media (min-width: 1024px) {
+              .grid-cells > *:nth-child(3n+1) { border-inline-start: 0; padding-inline-start: 0; }
+            }
+            .grid-cells > *:hover .cell-title { color: var(--gold); }
+            /* Add a bottom border on the very last row */
+            .grid-cells > *:last-child,
+            .grid-cells > *:nth-last-child(2),
+            .grid-cells > *:nth-last-child(3) {}
+          `}</style>
         </div>
 
-        <ScrollReveal delay={0.2}>
-          <p
-            className="force-ltr mt-14 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--fg-faint)]"
-            style={{ fontFamily: "var(--font-mono), monospace" }}
-          >
-            {t("disclaimer")}
+        {/* Decorative hairline with gold dot — §6.4 */}
+        <div className="mt-24 flex justify-center" aria-hidden>
+          <div className="relative" style={{ width: "240px" }}>
+            <div className="absolute top-1/2 inset-x-0 h-px bg-[var(--border-strong)]" />
+            <div
+              className="relative mx-auto h-1 w-1 rounded-full bg-[var(--gold)]"
+              style={{ boxShadow: "0 0 0 4px var(--gold-faint)" }}
+            />
+          </div>
+        </div>
+
+        {/* Pricing disclaimer */}
+        <Reveal delay={0.12}>
+          <p className="mt-12 text-center">
+            <Mono size={11} tone="faint">
+              {t("disclaimer")}
+            </Mono>
           </p>
-        </ScrollReveal>
+        </Reveal>
       </div>
     </section>
   );
+}
+
+function Cell({
+  children,
+  index,
+}: {
+  children: React.ReactNode;
+  index: number;
+}) {
+  return <div data-index={index}>{children}</div>;
 }

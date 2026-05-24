@@ -5,140 +5,117 @@ import {
   CalendarClock,
   MessageCircle,
   Mail,
-  ArrowRight,
   type LucideIcon,
 } from "lucide-react";
-import { SectionLabel } from "@/components/ui/SectionLabel";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { TextReveal } from "@/components/ui/TextReveal";
-import { MagneticTile } from "@/components/ui/MagneticTile";
+import { SectionRef } from "@/components/ui/SectionRef";
+import { Mono } from "@/components/ui/Mono";
+import { Reveal } from "@/components/motion/Reveal";
+import { SplitText } from "@/components/motion/SplitText";
 import { getContactLinks } from "@/lib/contact";
 
-type Tile = {
-  channel: string;
-  body: string;
-  cta: string;
-};
+type Tile = { channel: string; body: string; cta: string };
 
 const ICONS: LucideIcon[] = [CalendarClock, MessageCircle, Mail];
 
 export function SectionCTA() {
   const t = useTranslations("contact");
   const locale = useLocale();
+  const isAr = locale === "ar";
   const links = getContactLinks(locale);
   const tiles = (t.raw("tiles") as Tile[]) ?? [];
+
+  const headlineWords = (t.raw("headlineWords") as Array<
+    string | { text: string; accent?: boolean }
+  >) ?? [];
 
   const hrefs = [links.calcom, links.whatsapp, links.email];
   const external = [true, true, false];
 
-  // Headline: oversized 2 lines, italic-gold "No forms." as the accent.
-  const headlineLines = (t.raw("headlineLines") as string[]) ?? [];
-  const accentLineIndex = (t.raw("accentLineIndex") as number) ?? 1;
-
   return (
-    <section
-      id="contact"
-      className="relative px-6 md:px-10"
-      style={{ paddingBlock: "clamp(96px, 12vw, 192px)" }}
-    >
-      <div className="mx-auto max-w-[1280px]">
-        <div className="sticky top-[88px] z-20 -mb-2 w-fit">
-          <SectionLabel number="04" label={t("label")} />
+    <section id="contact" className="section-pad below-fold hairline">
+      <div className="container-page">
+        <Reveal>
+          <SectionRef number="4.0" label={t("ref")} />
+        </Reveal>
+
+        {/* Headline — text-wrap: balance so it wraps to 2 lines max,
+            not word-by-word. */}
+        <div
+          className="mt-10 md:mt-12"
+          style={{
+            maxWidth: "clamp(720px, 50vw, 960px)",
+          }}
+        >
+          <SplitText
+            as="h2"
+            className="t-display text-[var(--fg)] [text-wrap:balance]"
+            words={headlineWords}
+            ariaLabel={t("headlineAria")}
+            delay={0}
+            stagger={0.05}
+            duration={0.42}
+          />
         </div>
 
-        {/* Oversized headline with italic-gold accent line */}
-        <div className="mt-10 max-w-[20ch] md:mt-14">
-          {headlineLines.map((line, i) => (
-            <TextReveal
-              key={i}
-              as="h2"
-              text={line}
-              delay={i * 0.12}
-              className="block text-[var(--fg)]"
-              style={{
-                fontFamily: "var(--font-display), serif",
-                fontSize: "var(--text-display)",
-                lineHeight: 0.95,
-                letterSpacing: "-0.02em",
-                fontStyle: i === accentLineIndex ? "italic" : "normal",
-                color:
-                  i === accentLineIndex
-                    ? "var(--gold-bright)"
-                    : "var(--fg)",
-              }}
-            />
-          ))}
-        </div>
-
-        <ScrollReveal delay={0.15}>
-          <p
-            className="mt-10 max-w-[60ch] text-[var(--fg-muted)]"
-            style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.6 }}
-          >
+        <Reveal delay={0.1}>
+          <p className="mt-8 t-body-lg text-[var(--fg-secondary)] max-w-[600px]">
             {t("sub")}
           </p>
-        </ScrollReveal>
+        </Reveal>
 
-        {/* 3 magnetic tiles */}
-        <div className="mt-16 grid grid-cols-1 gap-6 md:mt-20 md:grid-cols-3">
+        {/* Three hairline rows / columns. No card chrome. */}
+        <div className="mt-20 md:mt-24 grid grid-cols-1 md:grid-cols-3 border-t border-[var(--border)]">
           {tiles.map((tile, i) => {
             const Icon = ICONS[i] ?? Mail;
+            const ext = external[i]
+              ? { target: "_blank", rel: "noopener noreferrer" }
+              : {};
             return (
-              <ScrollReveal key={i} delay={0.1 + i * 0.08}>
-                <MagneticTile
-                  href={hrefs[i]}
-                  external={external[i]}
-                  ariaLabel={tile.channel}
-                  className="flex h-full min-h-[280px] flex-col"
-                >
-                  <Icon
-                    size={48}
-                    strokeWidth={1.5}
-                    style={{ color: "var(--gold)" }}
+              <a
+                key={i}
+                href={hrefs[i]}
+                {...ext}
+                className="group block border-b border-[var(--border)] md:border-b-0 py-10 md:py-12 transition-colors duration-150"
+                style={{
+                  borderInlineStart: i > 0 ? "1px solid var(--border)" : undefined,
+                  paddingInlineStart: i > 0 ? "clamp(20px, 3vw, 48px)" : undefined,
+                  paddingInlineEnd: i < tiles.length - 1 ? "clamp(20px, 3vw, 48px)" : undefined,
+                }}
+              >
+                <Icon
+                  size={20}
+                  strokeWidth={1.5}
+                  style={{ color: "var(--fg-muted)" }}
+                  aria-hidden
+                />
+                <h3 className="mt-6 t-body-lg font-medium text-[var(--fg)] group-hover:text-[var(--gold)] transition-colors duration-150">
+                  {tile.channel}
+                </h3>
+                <p className="mt-3 t-body text-[var(--fg-secondary)]">
+                  {tile.body}
+                </p>
+                <div className="mt-8 inline-flex items-center gap-2">
+                  <Mono size={11} tone="faint">{tile.cta}</Mono>
+                  <span
                     aria-hidden
-                  />
-                  <h3
-                    className="mt-8 text-[var(--fg)]"
-                    style={{
-                      fontFamily: "var(--font-display), serif",
-                      fontSize: "clamp(28px, 3vw, 36px)",
-                      lineHeight: 1.05,
-                      letterSpacing: "-0.02em",
-                    }}
+                    className="text-[var(--fg-faint)] transition-transform duration-150 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
+                    style={{ fontFamily: "var(--font-mono), monospace", fontSize: "11px" }}
                   >
-                    {tile.channel}
-                  </h3>
-                  <p
-                    className="mt-3 text-[var(--fg-muted)]"
-                    style={{ fontSize: "15px", lineHeight: 1.55 }}
-                  >
-                    {tile.body}
-                  </p>
-                  <div
-                    className="force-ltr mt-auto flex items-center gap-2 pt-8 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--gold)]"
-                    style={{ fontFamily: "var(--font-mono), monospace" }}
-                  >
-                    <span>{tile.cta}</span>
-                    <ArrowRight
-                      size={14}
-                      strokeWidth={1.75}
-                      className="transition-transform duration-300 group-hover:translate-x-1"
-                    />
-                  </div>
-                </MagneticTile>
-              </ScrollReveal>
+                    {isAr ? "←" : "→"}
+                  </span>
+                </div>
+              </a>
             );
           })}
         </div>
 
-        <ScrollReveal delay={0.25}>
-          <p
-            className="force-ltr mt-14 text-center font-mono text-[11px] uppercase tracking-[0.24em] text-[var(--fg-faint)]"
-            style={{ fontFamily: "var(--font-mono), monospace" }}
-          >
-            {t("meta")}
+        <Reveal delay={0.15}>
+          <p className="mt-16 text-center">
+            <Mono size={11} tone="faint">
+              {t("meta")}
+            </Mono>
           </p>
-        </ScrollReveal>
+        </Reveal>
       </div>
     </section>
   );

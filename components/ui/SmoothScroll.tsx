@@ -3,17 +3,25 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 
+/**
+ * Lenis smooth scroll with the v2 brief's exact config.
+ * Disabled on touch devices (native scroll is better there)
+ * and at prefers-reduced-motion.
+ */
 export function SmoothScroll() {
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (prefersReduced) return;
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+
+    const touch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+    if (touch) return;
 
     const lenis = new Lenis({
-      lerp: 0.08,
+      lerp: 0.1,
       duration: 1.2,
+      easing: (t: number) => 1 - Math.pow(1 - t, 4),
       smoothWheel: true,
     });
 

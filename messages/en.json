@@ -6,16 +6,17 @@
     "cta": "Book a call"
   },
   "hero": {
-    "eyebrow": "RIYADH · BILINGUAL WEB STUDIO",
-    "headlineLines": [
-      "Websites Saudi",
+    "eyebrow": "RIYADH / BILINGUAL WEB STUDIO",
+    "headlineWords": [
+      "Websites",
+      "Saudi",
       "businesses",
-      "actually",
+      { "text": "actually", "accent": true },
       "need."
     ],
-    "accentLineIndex": 2,
+    "headlineAria": "Websites Saudi businesses actually need.",
     "sub": "We design and build bilingual websites — Arabic and English, mobile-first, made for how your customers actually browse, message, and book. One-time fee. You own the work.",
-    "ctaPrimary": "Book a free consultation",
+    "ctaPrimary": "Book a call",
     "ctaSecondary": "See how we work",
     "trust": [
       "OWN YOUR DOMAIN",
@@ -23,21 +24,22 @@
       "NO RETAINERS",
       "2–4 REVISION ROUNDS"
     ],
-    "scroll": "SCROLL"
+    "before": "BEFORE",
+    "after": "AFTER"
   },
   "what": {
-    "label": "WHAT IS NASHR",
+    "ref": "WHAT IS NASHR",
     "headline": "A small studio that builds the website your business deserves.",
     "intro1": "NASHR is a bilingual web design studio based in Riyadh. We build custom websites for Saudi businesses — restaurants, clinics, salons, contractors, professional services — that have been losing customers because they have no website, or a website that doesn't work hard enough for them.",
     "intro2": "We are not a large agency. We're a small team that cares about craft, and that means every site we ship is built from scratch around your business, your customers, and how Saudi Arabia actually buys in 2026.",
     "stats": [
       { "value": 96, "suffix": "%", "label": "of Saudi adults use WhatsApp daily" },
       { "value": 78, "suffix": "%", "label": "of Saudi customers search online before visiting a business" },
-      { "value": 1, "suffix": "×", "label": "one-time fee. No monthly retainers. Ever." }
+      { "value": 1, "suffix": "×", "label": "one-time fee. no monthly retainers. ever." }
     ]
   },
   "how": {
-    "label": "HOW WE WORK",
+    "ref": "HOW WE WORK",
     "headline": "Six steps. No surprises. You stay in control the whole way.",
     "steps": [
       { "num": "01", "title": "First contact", "body": "A call, a WhatsApp message, an email, or a visit. Whichever way works for you. We listen first." },
@@ -66,7 +68,7 @@
     }
   },
   "help": {
-    "label": "WHAT WE BUILD",
+    "ref": "WHAT WE BUILD",
     "headline": "Everything your customers expect — in Arabic, in English, on every screen.",
     "sub": "Pick what you need. We'll tell you honestly what your business actually requires — not what makes our invoice bigger.",
     "cards": [
@@ -83,16 +85,22 @@
     "disclaimer": "PRICES ARE CUSTOM PER PROJECT — TYPICALLY SAR 3,000 TO SAR 40,000+ DEPENDING ON SCOPE"
   },
   "contact": {
-    "label": "GET IN TOUCH",
-    "headlineLines": ["Three ways in.", "No forms."],
-    "accentLineIndex": 1,
+    "ref": "GET IN TOUCH",
+    "headlineWords": [
+      "Three",
+      "ways",
+      "in.",
+      { "text": "No", "accent": true },
+      { "text": "forms.", "accent": true }
+    ],
+    "headlineAria": "Three ways in. No forms.",
     "sub": "Pick the channel you already use. We answer fast in both Arabic and English.",
     "tiles": [
-      { "channel": "Book a call", "body": "A 20-minute free consultation. We look at your business and tell you honestly what would help.", "cta": "Open" },
-      { "channel": "WhatsApp us", "body": "The fastest way. Send us a message, we usually reply within an hour during business hours.", "cta": "Open" },
-      { "channel": "Email", "body": "If you'd rather write. We reply within one business day, always.", "cta": "Open" }
+      { "channel": "Book a call", "body": "A 20-minute free consultation. We look at your business and tell you honestly what would help.", "cta": "OPEN" },
+      { "channel": "WhatsApp us", "body": "The fastest way. Send us a message, we usually reply within an hour during business hours.", "cta": "OPEN" },
+      { "channel": "Email", "body": "If you'd rather write. We reply within one business day, always.", "cta": "OPEN" }
     ],
-    "meta": "RIYADH, KSA · NASHR.SA · @NASHR.STUDIO"
+    "meta": "RIYADH, KSA / NASHR.SA / @NASHR.STUDIO"
   },
   "footer": {
     "rights": "NASHR. All rights reserved.",

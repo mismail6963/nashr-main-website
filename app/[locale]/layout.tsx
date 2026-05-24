@@ -3,8 +3,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { locales, type Locale } from "@/lib/i18n";
-import { fontDisplay, fontSans, fontMono, fontArabic } from "@/lib/fonts";
-import { GradientMesh } from "@/components/ui/GradientMesh";
+import { fontSans, fontMono, fontArabic } from "@/lib/fonts";
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import "../globals.css";
 
@@ -54,14 +53,7 @@ export async function generateMetadata({
       description: m.description,
       siteName: "NASHR",
       locale: locale === "ar" ? "ar_SA" : "en_US",
-      images: [
-        {
-          url: `/api/og?locale=${locale}`,
-          width: 1200,
-          height: 630,
-          alt: m.title,
-        },
-      ],
+      images: [{ url: `/api/og?locale=${locale}`, width: 1200, height: 630, alt: m.title }],
     },
     twitter: {
       card: "summary_large_image",
@@ -69,9 +61,7 @@ export async function generateMetadata({
       description: m.description,
       images: [`/api/og?locale=${locale}`],
     },
-    icons: {
-      icon: "/favicon.svg",
-    },
+    icons: { icon: "/favicon.svg" },
   };
 }
 
@@ -84,11 +74,7 @@ const ORG_JSONLD = {
   logo: `${SITE_URL}/favicon.svg`,
   description: "Bilingual web design studio in Riyadh, Saudi Arabia.",
   areaServed: { "@type": "Country", name: "Saudi Arabia" },
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Riyadh",
-    addressCountry: "SA",
-  },
+  address: { "@type": "PostalAddress", addressLocality: "Riyadh", addressCountry: "SA" },
   contactPoint: [
     {
       "@type": "ContactPoint",
@@ -98,9 +84,6 @@ const ORG_JSONLD = {
       // TODO: replace with NASHR's real WhatsApp number
       telephone: "+9665XXXXXXXX",
     },
-  ],
-  sameAs: [
-    // TODO: socials
   ],
 };
 
@@ -118,8 +101,9 @@ export default async function LocaleLayout({
   const messages = await getMessages();
   const dir = locale === "ar" ? "rtl" : "ltr";
 
+  // Both font variables loaded always; per-locale CSS rule in globals.css
+  // picks the right family. Mono is global.
   const fontClass = [
-    fontDisplay.variable,
     fontSans.variable,
     fontMono.variable,
     fontArabic.variable,
@@ -137,7 +121,6 @@ export default async function LocaleLayout({
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <GradientMesh />
         <SmoothScroll />
         <NextIntlClientProvider messages={messages} locale={locale}>
           {children}
