@@ -3,6 +3,9 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { locales, type Locale } from "@/lib/i18n";
+import { fontDisplay, fontSans, fontMono, fontArabic } from "@/lib/fonts";
+import { GradientMesh } from "@/components/ui/GradientMesh";
+import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -29,9 +32,21 @@ export default async function LocaleLayout({
   const messages = await getMessages();
   const dir = locale === "ar" ? "rtl" : "ltr";
 
+  const fontClass = [
+    fontDisplay.variable,
+    fontSans.variable,
+    fontMono.variable,
+    fontArabic.variable,
+  ].join(" ");
+
   return (
-    <html lang={locale} dir={dir}>
+    <html lang={locale} dir={dir} className={fontClass}>
       <body>
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
+        <GradientMesh />
+        <SmoothScroll />
         <NextIntlClientProvider messages={messages} locale={locale}>
           {children}
         </NextIntlClientProvider>
