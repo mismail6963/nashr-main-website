@@ -72,32 +72,36 @@ export function HeroVisual() {
           </div>
         </div>
 
-        {/* Connector */}
+        {/* Connector — a hairline runs across the gap with a dot+arrow at its midpoint.
+            mobile: horizontal hairline, dot above, arrow ↓ below the dot
+            desktop: vertical hairline, dot+arrow inline, arrow → (or ← in RTL) */}
         <div
           aria-hidden
-          className="relative flex items-center justify-center self-stretch lg:px-6"
+          className="relative flex items-center justify-center self-stretch py-2 lg:px-6 lg:py-0"
+          style={{ minHeight: "32px" }}
         >
-          {/* Hairline — vertical on lg, horizontal on mobile */}
+          {/* Hairline */}
           <div
             className="absolute bg-[var(--border-strong)]
-                       left-1/2 top-0 h-px w-[calc(100%-32px)] -translate-x-1/2
-                       lg:left-auto lg:top-1/2 lg:h-[calc(100%-72px)] lg:w-px lg:-translate-y-1/2 lg:translate-x-0"
+                       left-1/2 top-1/2 h-px w-[60%] -translate-x-1/2 -translate-y-1/2
+                       lg:left-auto lg:top-1/2 lg:h-[calc(100%-80px)] lg:w-px lg:-translate-y-1/2 lg:translate-x-0"
           />
-          {/* Gold dot at midpoint */}
-          <div
-            className="relative h-1 w-1 rounded-full bg-[var(--gold)]"
-            style={{ boxShadow: "0 0 0 4px rgba(164,143,96,0.12)" }}
-          />
-          {/* Arrow glyph — animates on a 2s nudge loop (CSS only) */}
-          <div
-            className="absolute font-mono text-[11px] text-[var(--fg-muted)]
-                       left-[calc(50%+18px)] top-1/2 -translate-y-1/2
-                       lg:left-1/2 lg:top-[calc(50%+18px)] lg:-translate-x-1/2 lg:translate-y-0"
-          >
-            {/* Mobile: ↓ vertical nudge */}
-            <span className="connector-arrow vertical lg:hidden inline-block">↓</span>
-            {/* Desktop LTR: → / Desktop RTL: ← */}
-            <span className="connector-arrow horizontal hidden lg:inline-block">
+          {/* Dot + arrow group */}
+          <div className="relative flex flex-col items-center gap-2 lg:flex-row lg:gap-3">
+            <div
+              className="h-1 w-1 rounded-full bg-[var(--gold)]"
+              style={{ boxShadow: "0 0 0 4px rgba(164,143,96,0.12)" }}
+            />
+            {/* Mobile arrow — vertical nudge */}
+            <span
+              className="connector-arrow vertical font-mono text-[11px] text-[var(--fg-muted)] lg:hidden"
+            >
+              ↓
+            </span>
+            {/* Desktop arrow — horizontal nudge */}
+            <span
+              className="connector-arrow horizontal font-mono text-[11px] text-[var(--fg-muted)] hidden lg:inline"
+            >
               {isAr ? "←" : "→"}
             </span>
           </div>
