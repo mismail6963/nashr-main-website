@@ -36,6 +36,35 @@
       { "value": 1, "suffix": "×", "label": "one-time fee. No monthly retainers. Ever." }
     ]
   },
+  "how": {
+    "label": "HOW WE WORK",
+    "headline": "Six steps. No surprises. You stay in control the whole way.",
+    "steps": [
+      { "num": "01", "title": "First contact", "body": "A call, a WhatsApp message, an email, or a visit. Whichever way works for you. We listen first." },
+      { "num": "02", "title": "Free mockup call", "body": "We sit down — in person or on a call — walk through your business, and show you a free design mockup of what your site could look like. No payment, no commitment." },
+      { "num": "03", "title": "Scope & estimate", "body": "Once we both understand what you need, we confirm the scope and give you a clear price estimate. Custom — not a fixed package." },
+      { "num": "04", "title": "Agreement & deposit", "body": "We sign a short Letter of Engagement and you pay a 25% deposit. Work begins immediately." },
+      { "num": "05", "title": "Build & revise", "body": "We design, build, and refine. You get 2–4 rounds of revisions, included — no surprise charges, no nickel-and-diming." },
+      { "num": "06", "title": "Launch & handover", "body": "Final payment, full IP transfer to you, and we publish your site on a domain you own. The work is yours, forever." }
+    ],
+    "handover": {
+      "labels": { "you": "YOU PROVIDE", "us": "NASHR HANDLES" },
+      "youProvide": [
+        "Your logo",
+        "Your content & info",
+        "Approvals on rounds",
+        "Final sign-off"
+      ],
+      "nashrHandles": [
+        "Design & UX",
+        "Build & code",
+        "Copywriting polish",
+        "Hosting & launch",
+        "Bilingual setup (AR/EN)",
+        "SEO foundations"
+      ]
+    }
+  },
   "footer": {
     "rights": "NASHR. All rights reserved.",
     "privacy": "Privacy",

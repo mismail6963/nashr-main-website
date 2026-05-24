@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { Hero } from "@/components/sections/Hero";
 import { SectionWhat } from "@/components/sections/SectionWhat";
+import { SectionHow } from "@/components/sections/SectionHow";
 
 export default async function HomePage({
   params,
@@ -20,7 +21,7 @@ export default async function HomePage({
       <main id="main" className="relative">
         <Hero />
         <SectionWhat />
-        <section id="how" style={{ minHeight: "60vh" }} />
+        <SectionHow />
         <section id="contact" style={{ minHeight: "40vh" }} />
       </main>
       <Footer />
