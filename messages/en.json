@@ -65,6 +65,23 @@
       ]
     }
   },
+  "help": {
+    "label": "WHAT WE BUILD",
+    "headline": "Everything your customers expect — in Arabic, in English, on every screen.",
+    "sub": "Pick what you need. We'll tell you honestly what your business actually requires — not what makes our invoice bigger.",
+    "cards": [
+      { "title": "Bilingual by default", "body": "Real Arabic RTL and English LTR, with a one-tap toggle. Arabic-first — not Google-translated." },
+      { "title": "Mobile-first build", "body": "Most of your customers will see your site on a phone. We design for that screen first, then scale up." },
+      { "title": "WhatsApp integration", "body": "One-tap WhatsApp on every page. Customers enquire the way Saudi Arabia already messages — instantly." },
+      { "title": "Online booking", "body": "Direct booking via Cal.com or a custom system. Service, time slot, doctor or stylist — handled." },
+      { "title": "Google Maps & local SEO", "body": "Map embedded, hours, directions, and the foundations to show up when customers search nearby." },
+      { "title": "AI chat assistant", "body": "A 24/7 chatbot that answers FAQs, prices, hours, and triages enquiries. Optional add-on." },
+      { "title": "Services & team pages", "body": "Dedicated pages for each service and each doctor, stylist, or team member — with direct CTAs." },
+      { "title": "FAQ with search", "body": "A searchable FAQ that cuts incoming phone calls and increases booking confidence." },
+      { "title": "You own everything", "body": "Custom domain, SSL, full IP transfer on final payment. Your site, your code, your future." }
+    ],
+    "disclaimer": "PRICES ARE CUSTOM PER PROJECT — TYPICALLY SAR 3,000 TO SAR 40,000+ DEPENDING ON SCOPE"
+  },
   "footer": {
     "rights": "NASHR. All rights reserved.",
     "privacy": "Privacy",

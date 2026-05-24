@@ -5,6 +5,7 @@ import { CustomCursor } from "@/components/ui/CustomCursor";
 import { Hero } from "@/components/sections/Hero";
 import { SectionWhat } from "@/components/sections/SectionWhat";
 import { SectionHow } from "@/components/sections/SectionHow";
+import { SectionHelp } from "@/components/sections/SectionHelp";
 
 export default async function HomePage({
   params,
@@ -22,6 +23,7 @@ export default async function HomePage({
         <Hero />
         <SectionWhat />
         <SectionHow />
+        <SectionHelp />
         <section id="contact" style={{ minHeight: "40vh" }} />
       </main>
       <Footer />
