@@ -25,6 +25,17 @@
     ],
     "scroll": "SCROLL"
   },
+  "what": {
+    "label": "WHAT IS NASHR",
+    "headline": "A small studio that builds the website your business deserves.",
+    "intro1": "NASHR is a bilingual web design studio based in Riyadh. We build custom websites for Saudi businesses — restaurants, clinics, salons, contractors, professional services — that have been losing customers because they have no website, or a website that doesn't work hard enough for them.",
+    "intro2": "We are not a large agency. We're a small team that cares about craft, and that means every site we ship is built from scratch around your business, your customers, and how Saudi Arabia actually buys in 2026.",
+    "stats": [
+      { "value": 96, "suffix": "%", "label": "of Saudi adults use WhatsApp daily" },
+      { "value": 78, "suffix": "%", "label": "of Saudi customers search online before visiting a business" },
+      { "value": 1, "suffix": "×", "label": "one-time fee. No monthly retainers. Ever." }
+    ]
+  },
   "footer": {
     "rights": "NASHR. All rights reserved.",
     "privacy": "Privacy",
