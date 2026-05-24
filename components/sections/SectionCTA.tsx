@@ -42,9 +42,9 @@ export function SectionCTA() {
       style={{ paddingBlock: "clamp(96px, 12vw, 192px)" }}
     >
       <div className="mx-auto max-w-[1280px]">
-        <ScrollReveal>
+        <div className="sticky top-[88px] z-20 -mb-2 w-fit">
           <SectionLabel number="04" label={t("label")} />
-        </ScrollReveal>
+        </div>
 
         {/* Oversized headline with italic-gold accent line */}
         <div className="mt-10 max-w-[20ch] md:mt-14">

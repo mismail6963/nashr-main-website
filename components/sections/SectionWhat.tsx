@@ -23,9 +23,9 @@ export function SectionWhat() {
       style={{ paddingBlock: "clamp(96px, 12vw, 192px)" }}
     >
       <div className="mx-auto max-w-[1280px]">
-        <ScrollReveal>
+        <div className="sticky top-[88px] z-20 -mb-2 w-fit">
           <SectionLabel number="01" label={t("label")} />
-        </ScrollReveal>
+        </div>
 
         <div className="mt-10 md:mt-14">
           <TextReveal
