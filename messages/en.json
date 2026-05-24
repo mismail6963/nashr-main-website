@@ -5,6 +5,26 @@
     "contact": "Contact",
     "cta": "Book a call"
   },
+  "hero": {
+    "eyebrow": "RIYADH · BILINGUAL WEB STUDIO",
+    "headlineLines": [
+      "Websites Saudi",
+      "businesses",
+      "actually",
+      "need."
+    ],
+    "accentLineIndex": 2,
+    "sub": "We design and build bilingual websites — Arabic and English, mobile-first, made for how your customers actually browse, message, and book. One-time fee. You own the work.",
+    "ctaPrimary": "Book a free consultation",
+    "ctaSecondary": "See how we work",
+    "trust": [
+      "OWN YOUR DOMAIN",
+      "OWN YOUR CODE",
+      "NO RETAINERS",
+      "2–4 REVISION ROUNDS"
+    ],
+    "scroll": "SCROLL"
+  },
   "footer": {
     "rights": "NASHR. All rights reserved.",
     "privacy": "Privacy",
