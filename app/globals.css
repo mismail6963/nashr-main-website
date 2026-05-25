@@ -267,6 +267,42 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 /* ============================================================
+ * Ambient mesh — CSS-only animated blobs for hero / stats backdrops.
+ * Compositor-only animations (transform), so zero frame budget.
+ * ============================================================ */
+
+.ambient-blob {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+@keyframes ambient-drift-a {
+  0%   { transform: translate3d(0,   0,   0); }
+  33%  { transform: translate3d(8vw, 3vw, 0); }
+  66%  { transform: translate3d(-4vw, 5vw, 0); }
+  100% { transform: translate3d(0,   0,   0); }
+}
+@keyframes ambient-drift-b {
+  0%   { transform: translate3d(0,    0,   0); }
+  50%  { transform: translate3d(-6vw, 6vw, 0); }
+  100% { transform: translate3d(0,    0,   0); }
+}
+@keyframes ambient-drift-c {
+  0%   { transform: translate3d(0,    0,    0); }
+  50%  { transform: translate3d(5vw,  -4vw, 0); }
+  100% { transform: translate3d(0,    0,    0); }
+}
+
+.ambient-hero-anim .ambient-blob-a  { animation: ambient-drift-a 22s ease-in-out infinite; }
+.ambient-hero-anim .ambient-blob-b  { animation: ambient-drift-b 27s ease-in-out infinite; }
+.ambient-hero-anim .ambient-blob-c  { animation: ambient-drift-c 18s ease-in-out infinite; }
+
+.ambient-stats-anim .ambient-blob-a { animation: ambient-drift-a 24s ease-in-out infinite; }
+.ambient-stats-anim .ambient-blob-b { animation: ambient-drift-b 19s ease-in-out infinite; }
+.ambient-stats-anim .ambient-blob-c { animation: ambient-drift-c 30s ease-in-out infinite; }
+
+/* ============================================================
  * Architectural decoration — full-page hairlines, watermarks,
  * dot grid, status badges. Strict z-index discipline so nothing
  * leaks above content or blocks pointer events.

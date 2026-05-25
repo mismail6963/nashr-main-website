@@ -1,6 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import { motion } from "motion/react";
 import {
   CalendarClock,
   MessageCircle,
@@ -49,7 +50,6 @@ export function SectionCTA() {
         </p>
       </Reveal>
 
-      {/* Three tiles. Surface-card bg, hairline border, gold-bright on hover. */}
       <div className="mt-16 md:mt-20 grid grid-cols-1 md:grid-cols-3 gap-6">
         {tiles.map((tile, i) => {
           const Icon = ICONS[i] ?? Mail;
@@ -61,8 +61,13 @@ export function SectionCTA() {
               <a
                 href={hrefs[i]}
                 {...ext}
-                className="group block h-full bg-[var(--bg-card)] border border-[var(--border)] hover:border-[var(--gold)]/40 hover:bg-[var(--bg-elevated)] transition-colors duration-200 p-8 md:p-10 min-h-[200px] flex flex-col justify-between"
+                className="group block relative h-full bg-[var(--bg-card)] border border-[var(--border)] hover:border-[var(--gold)]/40 hover:bg-[var(--bg-elevated)] transition-colors duration-200 p-8 md:p-10 min-h-[240px] flex flex-col justify-between overflow-hidden"
               >
+                {/* Hover preview slot — top-right corner */}
+                <div className="absolute top-6" style={{ insetInlineEnd: "24px" }}>
+                  <TilePreview index={i} />
+                </div>
+
                 <Icon
                   size={20}
                   strokeWidth={1.5}
@@ -103,5 +108,107 @@ export function SectionCTA() {
         </p>
       </Reveal>
     </SectionShell>
+  );
+}
+
+/* ---------- TilePreview — per-tile hover micro-animation ---------- */
+
+function TilePreview({ index }: { index: number }) {
+  switch (index) {
+    case 0: return <PreviewCalendar />;
+    case 1: return <PreviewChat />;
+    case 2: return <PreviewEnvelope />;
+    default: return null;
+  }
+}
+
+/* Calendar tile — 5-bar audio meter equalizes on hover (call connecting feel) */
+function PreviewCalendar() {
+  return (
+    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end gap-[3px] h-6">
+      {[0, 0.1, 0.2, 0.3, 0.4].map((delay, i) => (
+        <motion.span
+          key={i}
+          className="block w-[3px] rounded-sm bg-[var(--gold-bright)]"
+          initial={{ height: "20%" }}
+          animate={{ height: ["20%", "90%", "40%", "70%", "30%"] }}
+          transition={{
+            duration: 1.4,
+            ease: "easeInOut",
+            repeat: Infinity,
+            delay,
+          }}
+          style={{ minHeight: "4px" }}
+        />
+      ))}
+    </div>
+  );
+}
+
+/* WhatsApp tile — typing-indicator bubble on hover */
+function PreviewChat() {
+  return (
+    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+      <div className="inline-flex items-center gap-1 rounded-full border border-[var(--gold)]/30 bg-[rgba(164,143,96,0.06)] px-2 py-1.5">
+        {[0, 1, 2].map((i) => (
+          <motion.span
+            key={i}
+            className="block h-1 w-1 rounded-full bg-[var(--gold-bright)]"
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            transition={{
+              duration: 1,
+              ease: "easeInOut",
+              repeat: Infinity,
+              delay: i * 0.15,
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* Email tile — envelope opens with paper edge sliding up */
+function PreviewEnvelope() {
+  return (
+    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 relative">
+      <svg viewBox="0 0 32 24" width="32" height="24" aria-hidden>
+        {/* Envelope body */}
+        <rect
+          x="2"
+          y="6"
+          width="28"
+          height="16"
+          rx="2"
+          fill="none"
+          stroke="var(--gold-bright)"
+          strokeWidth="1.25"
+        />
+        {/* Open flap */}
+        <motion.path
+          d="M 2 6 L 16 16 L 30 6"
+          fill="none"
+          stroke="var(--gold-bright)"
+          strokeWidth="1.25"
+          initial={{ pathLength: 0, opacity: 0.5 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        />
+        {/* Paper sliding up */}
+        <motion.rect
+          x="6"
+          y="14"
+          width="20"
+          height="10"
+          rx="1"
+          fill="var(--bg-card)"
+          stroke="var(--fg-muted)"
+          strokeWidth="0.75"
+          initial={{ y: 14 }}
+          animate={{ y: 2 }}
+          transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </svg>
+    </div>
   );
 }

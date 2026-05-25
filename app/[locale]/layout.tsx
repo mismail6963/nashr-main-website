@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { locales, type Locale } from "@/lib/i18n";
 import { fontSans, fontMono, fontArabic } from "@/lib/fonts";
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
+import { CustomCursor } from "@/components/ui/CustomCursor";
+import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import "../globals.css";
 
 const SITE_URL = "https://nashr.sa";
@@ -122,6 +124,8 @@ export default async function LocaleLayout({
           Skip to content
         </a>
         <div aria-hidden className="page-frame" />
+        <GrainOverlay />
+        <CustomCursor />
         <SmoothScroll />
         <NextIntlClientProvider messages={messages} locale={locale}>
           {children}

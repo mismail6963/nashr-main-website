@@ -25,7 +25,11 @@
       "2–4 REVISION ROUNDS"
     ],
     "before": "BEFORE",
-    "after": "AFTER"
+    "after": "AFTER",
+    "brokenStateTitle": "PAGE NOT FOUND",
+    "brokenStateSub": "your customers leave",
+    "featMobile": "MOBILE + CHAT",
+    "featBooking": "BOOKING"
   },
   "what": {
     "ref": "WHAT IS NASHR",
@@ -41,6 +45,14 @@
   "how": {
     "ref": "HOW WE WORK",
     "headline": "Six steps. No surprises. You stay in control the whole way.",
+    "chatPrompts": [
+      "Hi — we don't really have a site. Customers can't find us. Where do we start?",
+      "Sounds good. How do we figure out what it should actually look like?",
+      "And the price — how does that part work?",
+      "Okay we're in. What do we sign and when do you start?",
+      "Can we make changes once we see the design?",
+      "And launching — what happens at the end?"
+    ],
     "steps": [
       { "num": "01", "title": "First contact", "body": "A call, a WhatsApp message, an email, or a visit. Whichever way works for you. We listen first." },
       { "num": "02", "title": "Free mockup call", "body": "We sit down — in person or on a call — walk through your business, and show you a free design mockup of what your site could look like. No payment, no commitment." },
@@ -72,15 +84,36 @@
     "headline": "Everything your customers expect — in Arabic, in English, on every screen.",
     "sub": "Pick what you need. We'll tell you honestly what your business actually requires — not what makes our invoice bigger.",
     "cards": [
-      { "title": "Bilingual by default", "body": "Real Arabic RTL and English LTR, with a one-tap toggle. Arabic-first — not Google-translated." },
-      { "title": "Mobile-first build", "body": "Most of your customers will see your site on a phone. We design for that screen first, then scale up." },
-      { "title": "WhatsApp integration", "body": "One-tap WhatsApp on every page. Customers enquire the way Saudi Arabia already messages — instantly." },
-      { "title": "Online booking", "body": "Direct booking via Cal.com or a custom system. Service, time slot, doctor or stylist — handled." },
-      { "title": "Google Maps & local SEO", "body": "Map embedded, hours, directions, and the foundations to show up when customers search nearby." },
-      { "title": "AI chat assistant", "body": "A 24/7 chatbot that answers FAQs, prices, hours, and triages enquiries. Optional add-on." },
-      { "title": "Services & team pages", "body": "Dedicated pages for each service and each doctor, stylist, or team member — with direct CTAs." },
-      { "title": "FAQ with search", "body": "A searchable FAQ that cuts incoming phone calls and increases booking confidence." },
-      { "title": "You own everything", "body": "Custom domain, SSL, full IP transfer on final payment. Your site, your code, your future." }
+      {
+        "title": "Bilingual by default",
+        "body": "Real Arabic RTL and English LTR, with a one-tap toggle. Arabic-first — not Google-translated.",
+        "features": ["AR + EN", "DEDICATED SERVICE PAGES", "SEARCHABLE FAQ"]
+      },
+      {
+        "title": "Mobile-first build",
+        "body": "Designed for the screen most Saudi customers will use — the phone — then scaled up cleanly.",
+        "features": ["4G OPTIMIZED", "TAP TARGETS", "BOOKING ON MOBILE"]
+      },
+      {
+        "title": "Conversational",
+        "body": "One-tap WhatsApp on every page, plus an optional 24/7 AI assistant that answers FAQs, prices, and hours.",
+        "features": ["WHATSAPP", "AI CHAT", "ENQUIRY TRIAGE"]
+      },
+      {
+        "title": "Performance",
+        "body": "Sub-200ms server response, with the local SEO foundations to show up when customers search nearby.",
+        "features": ["<200MS TTFB", "GOOGLE MAPS", "LOCAL SEO"]
+      },
+      {
+        "title": "Durability",
+        "body": "SSL, secure static-first builds, and full IP transfer on final payment. Your site, your code, your future.",
+        "features": ["SSL + STATIC", "FULL IP TRANSFER", "DOMAIN YOU OWN"]
+      },
+      {
+        "title": "Architecture",
+        "body": "Modern decoupled stack with direct integrations for booking (Cal.com or custom), team pages, and services.",
+        "features": ["HEADLESS / API-FIRST", "CAL.COM BOOKING", "TEAM + SERVICES"]
+      }
     ],
     "disclaimer": "PRICES ARE CUSTOM PER PROJECT — TYPICALLY SAR 3,000 TO SAR 40,000+ DEPENDING ON SCOPE"
   },
