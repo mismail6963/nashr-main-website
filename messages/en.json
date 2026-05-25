@@ -25,7 +25,11 @@
       "2–4 REVISION ROUNDS"
     ],
     "before": "BEFORE",
-    "after": "AFTER"
+    "after": "AFTER",
+    "brokenStateTitle": "PAGE NOT FOUND",
+    "brokenStateSub": "your customers leave",
+    "featMobile": "MOBILE + CHAT",
+    "featBooking": "BOOKING"
   },
   "what": {
     "ref": "WHAT IS NASHR",

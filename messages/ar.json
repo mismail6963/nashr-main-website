@@ -25,7 +25,11 @@
       "٢–٤ جولات مراجعة"
     ],
     "before": "قبل",
-    "after": "بعد"
+    "after": "بعد",
+    "brokenStateTitle": "الصفحة غير موجودة",
+    "brokenStateSub": "عملاؤك يذهبون",
+    "featMobile": "جوال + شات",
+    "featBooking": "حجز"
   },
   "what": {
     "ref": "WHAT IS NASHR",
