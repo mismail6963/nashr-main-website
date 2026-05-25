@@ -1,0 +1,116 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
+import { Fragment, type ReactNode } from "react";
+import { EASE_OUT_QUINT } from "@/lib/motion";
+
+type Word = string | { text: string; accent?: boolean };
+
+type Props = {
+  /** Pre-split words. Strings or {text, accent} objects (accent = gold). */
+  words: Word[];
+  /** Tag for the wrapping element. */
+  as?: "h1" | "h2" | "h3" | "p" | "span";
+  /** Trigger on mount? Otherwise scroll-in once. */
+  onMount?: boolean;
+  /** Stagger between words (s). Default 60ms. */
+  stagger?: number;
+  /** Initial delay (s) before the first word reveals. */
+  delay?: number;
+  /** Each word reveal duration (s). */
+  duration?: number;
+  className?: string;
+  style?: React.CSSProperties;
+  /** Accessible label for the headline (read once by screen readers). */
+  ariaLabel: string;
+  children?: ReactNode;
+};
+
+/**
+ * Per-word reveal with clip-path mask, slides up from below.
+ * Each word is wrapped in an overflow-hidden mask. The word itself
+ * translates up from 110% → 0%.
+ *
+ * Used for the hero headline. Honours prefers-reduced-motion.
+ */
+export function SplitText({
+  words,
+  as = "h1",
+  onMount = false,
+  stagger = 0.06,
+  delay = 0,
+  duration = 0.42,
+  className,
+  style,
+  ariaLabel,
+}: Props) {
+  const reduce = useReducedMotion();
+  const Tag = motion[as] as typeof motion.h1;
+
+  // Reduced motion: static render, no animation, no clip masks.
+  if (reduce) {
+    const StaticTag = as as keyof React.JSX.IntrinsicElements;
+    return (
+      <StaticTag className={className} style={style} aria-label={ariaLabel}>
+        {words.map((w, i) => {
+          const isObj = typeof w === "object";
+          const text = isObj ? w.text : w;
+          const accent = isObj && w.accent;
+          return (
+            <Fragment key={i}>
+              <span style={accent ? { color: "var(--gold)" } : undefined}>
+                {text}
+              </span>
+              {i < words.length - 1 && " "}
+            </Fragment>
+          );
+        })}
+      </StaticTag>
+    );
+  }
+
+  return (
+    <Tag
+      className={className}
+      style={style}
+      aria-label={ariaLabel}
+      initial="hidden"
+      animate={onMount ? "visible" : undefined}
+      whileInView={onMount ? undefined : "visible"}
+      viewport={onMount ? undefined : { once: true, margin: "-10% 0px" }}
+    >
+      <span className="sr-only">{ariaLabel}</span>
+      {words.map((w, i) => {
+        const isObj = typeof w === "object";
+        const text = isObj ? w.text : w;
+        const accent = isObj && w.accent;
+        return (
+          <Fragment key={i}>
+            <span
+              aria-hidden
+              className="inline-block overflow-hidden align-baseline"
+              style={{ verticalAlign: "bottom", paddingBottom: "0.04em" }}
+            >
+              <motion.span
+                className="inline-block"
+                style={accent ? { color: "var(--gold)" } : undefined}
+                variants={{
+                  hidden: { y: "110%" },
+                  visible: { y: "0%" },
+                }}
+                transition={{
+                  duration,
+                  delay: delay + i * stagger,
+                  ease: EASE_OUT_QUINT,
+                }}
+              >
+                {text}
+              </motion.span>
+            </span>
+            {i < words.length - 1 && " "}
+          </Fragment>
+        );
+      })}
+    </Tag>
+  );
+}

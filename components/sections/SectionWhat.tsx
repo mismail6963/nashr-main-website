@@ -1,126 +1,62 @@
-"use client";
-
 import { useTranslations } from "next-intl";
-import { SectionLabel } from "@/components/ui/SectionLabel";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { TextReveal } from "@/components/ui/TextReveal";
+import { SectionShell } from "@/components/ui/SectionShell";
+import { Reveal } from "@/components/motion/Reveal";
 import { CountUp } from "@/components/ui/CountUp";
 
-type Stat = {
-  value: number;
-  suffix?: string;
-  label: string;
-};
+type Stat = { value: number; suffix: string; label: string };
 
+/**
+ * §01 — What is NASHR
+ * 2-col sticky layout via SectionShell.
+ * Stats sit in a single sheet — 1px hairline grid via gap-px on a hairline bg.
+ */
 export function SectionWhat() {
   const t = useTranslations("what");
   const stats = (t.raw("stats") as Stat[]) ?? [];
 
   return (
-    <section
-      id="what"
-      className="relative px-6 md:px-10"
-      style={{ paddingBlock: "clamp(96px, 12vw, 192px)" }}
-    >
-      <div className="mx-auto max-w-[1280px]">
-        <div className="sticky top-[88px] z-20 -mb-2 w-fit">
-          <SectionLabel number="01" label={t("label")} />
-        </div>
+    <SectionShell id="what" number="1.0" label={t("ref")} watermark="01">
+      <Reveal>
+        <h2 className="t-h1 max-w-[18ch] text-[var(--fg)]">{t("headline")}</h2>
+      </Reveal>
 
-        <div className="mt-10 md:mt-14">
-          <TextReveal
-            as="h2"
-            text={t("headline")}
-            className="max-w-[18ch] text-[var(--fg)]"
-            style={{
-              fontFamily: "var(--font-display), serif",
-              fontSize: "var(--text-h1)",
-              lineHeight: 1.02,
-              letterSpacing: "-0.02em",
-            }}
-          />
-        </div>
+      <Reveal delay={0.06}>
+        <p className="t-body-lg mt-10 text-[var(--fg-secondary)] max-w-[540px]">
+          {t("intro1")}
+        </p>
+      </Reveal>
+      <Reveal delay={0.1}>
+        <p className="t-body-lg mt-6 text-[var(--fg-secondary)] max-w-[540px]">
+          {t("intro2")}
+        </p>
+      </Reveal>
 
-        <div className="mt-16 grid grid-cols-1 gap-12 md:mt-24 md:grid-cols-12 md:gap-16">
-          {/* Left: intro paragraphs */}
-          <ScrollReveal delay={0.1} className="md:col-span-7">
-            <div className="space-y-6">
-              <p
-                className="max-w-[58ch] text-[var(--fg-muted)]"
-                style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.6 }}
+      {/* Stats — 3 cells in a single hairline sheet */}
+      <Reveal delay={0.15}>
+        <div className="mt-20 md:mt-24 grid grid-cols-1 md:grid-cols-3 gap-px bg-[var(--border)] border border-[var(--border)]">
+          {stats.map((stat, i) => (
+            <div key={i} className="bg-[var(--bg)] p-10 md:p-12 flex flex-col gap-4 min-h-[260px]">
+              <span
+                className="ltr-mono inline-flex items-baseline"
+                style={{
+                  fontFamily: "var(--font-sans), sans-serif",
+                  fontWeight: 500,
+                  fontSize: "clamp(56px, 7vw, 88px)",
+                  lineHeight: 1,
+                  letterSpacing: "-0.04em",
+                  color: "var(--gold-bright)",
+                }}
               >
-                {t("intro1")}
-              </p>
-              <p
-                className="max-w-[58ch] text-[var(--fg-muted)]"
-                style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.6 }}
-              >
-                {t("intro2")}
+                <CountUp to={stat.value} />
+                <span>{stat.suffix}</span>
+              </span>
+              <p className="font-mono t-mono-sm uppercase text-[var(--fg-faint)]">
+                {stat.label}
               </p>
             </div>
-          </ScrollReveal>
-
-          {/* Right: 3 stacked stat blocks */}
-          <div className="space-y-6 md:col-span-5">
-            {stats.map((stat, i) => (
-              <ScrollReveal key={i} delay={0.15 + i * 0.1}>
-                <StatBlock stat={stat} />
-              </ScrollReveal>
-            ))}
-          </div>
+          ))}
         </div>
-      </div>
-    </section>
-  );
-}
-
-function StatBlock({ stat }: { stat: Stat }) {
-  return (
-    <div
-      className="group relative overflow-hidden rounded-2xl border border-[var(--surface-line)] bg-[var(--bg-card)]/60 p-7 transition-colors duration-300 hover:border-[var(--gold)]/30"
-    >
-      {/* Top hairline */}
-      <div
-        aria-hidden
-        className="absolute inset-x-0 top-0 h-px opacity-60"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(164,143,96,0.4), transparent)",
-        }}
-      />
-      <div
-        className="force-ltr flex items-baseline gap-1"
-        style={{
-          fontFamily: "var(--font-display), serif",
-          fontSize: "clamp(56px, 8vw, 96px)",
-          lineHeight: 1,
-          letterSpacing: "-0.03em",
-          color: "var(--fg)",
-        }}
-      >
-        <CountUp to={stat.value} />
-        {stat.suffix && (
-          <span
-            style={{
-              fontSize: "0.5em",
-              color: "var(--gold-bright)",
-              marginInlineStart: "0.05em",
-            }}
-          >
-            {stat.suffix}
-          </span>
-        )}
-      </div>
-      <div
-        className="mt-4 h-px w-12 bg-[var(--gold)]/60"
-        aria-hidden
-      />
-      <p
-        className="mt-4 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--fg-muted)]"
-        style={{ fontFamily: "var(--font-mono), monospace" }}
-      >
-        {stat.label}
-      </p>
-    </div>
+      </Reveal>
+    </SectionShell>
   );
 }

@@ -3,12 +3,17 @@
 import { useTranslations } from "next-intl";
 import { motion, useInView, useReducedMotion } from "motion/react";
 import { useRef } from "react";
-import { SectionLabel } from "@/components/ui/SectionLabel";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { TextReveal } from "@/components/ui/TextReveal";
+import { SectionShell } from "@/components/ui/SectionShell";
+import { Mono } from "@/components/ui/Mono";
+import { Reveal } from "@/components/motion/Reveal";
+import { EASE_OUT_QUINT, REVEAL_VIEWPORT } from "@/lib/motion";
 
 type Step = { num: string; title: string; body: string };
-type Handover = { youProvide: string[]; nashrHandles: string[]; labels: { you: string; us: string } };
+type Handover = {
+  labels: { you: string; us: string };
+  youProvide: string[];
+  nashrHandles: string[];
+};
 
 export function SectionHow() {
   const t = useTranslations("how");
@@ -16,192 +21,107 @@ export function SectionHow() {
   const handover = t.raw("handover") as Handover;
 
   return (
-    <section
+    <SectionShell
       id="how"
-      className="relative px-6 md:px-10"
-      style={{ paddingBlock: "clamp(96px, 12vw, 192px)" }}
+      number="2.0"
+      label={t("ref")}
+      watermark="02"
+      elevated
     >
-      <div className="mx-auto max-w-[1280px]">
-        <div className="sticky top-[88px] z-20 -mb-2 w-fit">
-          <SectionLabel number="02" label={t("label")} />
-        </div>
+      <Reveal>
+        <h2 className="t-h1 max-w-[24ch] text-[var(--fg)]">
+          {t("headline")}
+        </h2>
+      </Reveal>
 
-        <div className="mt-10 md:mt-14">
-          <TextReveal
-            as="h2"
-            text={t("headline")}
-            className="max-w-[22ch] text-[var(--fg)]"
-            style={{
-              fontFamily: "var(--font-display), serif",
-              fontSize: "var(--text-h1)",
-              lineHeight: 1.02,
-              letterSpacing: "-0.02em",
-            }}
+      {/* Row-based timeline. Each step is a 2-col grid (num | content)
+          with a 1px hairline beneath. Active row gold-highlights the num. */}
+      <ol className="mt-20 border-b border-[var(--border)]">
+        {steps.map((step, i) => (
+          <TimelineRow key={i} step={step} index={i} />
+        ))}
+      </ol>
+
+      {/* You provide / NASHR handles split */}
+      <Reveal delay={0.1}>
+        <div className="mt-24 grid grid-cols-1 md:grid-cols-2 border-t border-[var(--border)]">
+          <SplitColumn label={handover.labels.you} items={handover.youProvide} />
+          <SplitColumn
+            label={handover.labels.us}
+            items={handover.nashrHandles}
+            border
           />
         </div>
-
-        {/* Timeline */}
-        <div className="relative mt-20 md:mt-28">
-          {/* Vertical rule — runs the full height of the steps */}
-          <div
-            aria-hidden
-            className="absolute top-0 bottom-0 w-px bg-[var(--gold)]/20 ms-[15px] md:ms-[19px]"
-          />
-
-          <ol className="space-y-14 md:space-y-20">
-            {steps.map((step, i) => (
-              <TimelineStep key={i} step={step} index={i} />
-            ))}
-          </ol>
-        </div>
-
-        {/* You provide / NASHR handles split */}
-        <ScrollReveal delay={0.1}>
-          <div className="mt-28 grid grid-cols-1 gap-10 rounded-2xl border border-[var(--surface-line)] bg-[var(--bg-card)]/40 p-10 md:grid-cols-2 md:gap-0 md:divide-x md:divide-[var(--gold)]/15 md:p-0 rtl:md:divide-x-reverse">
-            <SplitColumn
-              label={handover.labels.you}
-              items={handover.youProvide}
-            />
-            <SplitColumn
-              label={handover.labels.us}
-              items={handover.nashrHandles}
-              accent
-            />
-          </div>
-        </ScrollReveal>
-      </div>
-    </section>
+      </Reveal>
+    </SectionShell>
   );
 }
 
-function TimelineStep({ step, index }: { step: Step; index: number }) {
+function TimelineRow({ step, index }: { step: Step; index: number }) {
   const ref = useRef<HTMLLIElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-120px" });
+  const inView = useInView(ref, REVEAL_VIEWPORT);
   const reduce = useReducedMotion();
 
   return (
-    <li ref={ref} className="relative ps-14 md:ps-20">
-      {/* Node */}
-      <div
-        aria-hidden
-        className="absolute top-2 -start-px ms-[7px] md:ms-[11px]"
-      >
-        <div className="relative h-4 w-4">
-          <div
-            className="absolute inset-0 rounded-full border bg-[var(--bg)]"
-            style={{
-              borderColor: inView ? "var(--gold)" : "var(--gold-soft)",
-              transition: "border-color 600ms var(--ease-out-expo)",
-            }}
-          />
-          <motion.div
-            className="absolute inset-0 rounded-full bg-[var(--gold)]"
-            initial={{ scale: 0 }}
-            animate={{ scale: inView ? 1 : 0 }}
-            transition={{
-              duration: 0.5,
-              ease: [0.16, 1, 0.3, 1],
-              delay: 0.15,
-            }}
-            style={{ transformOrigin: "center" }}
-          />
-          {/* Pulse ring */}
-          {inView && !reduce && (
-            <motion.div
-              className="absolute inset-0 rounded-full border border-[var(--gold)]"
-              initial={{ scale: 1, opacity: 0.8 }}
-              animate={{ scale: 3, opacity: 0 }}
-              transition={{
-                duration: 1.8,
-                ease: "easeOut",
-                delay: 0.3,
-                repeat: 1,
-              }}
-            />
-          )}
-        </div>
-      </div>
-
-      {/* Card */}
-      <motion.div
-        initial={reduce ? false : { opacity: 0, x: -16 }}
-        animate={inView ? { opacity: 1, x: 0 } : undefined}
-        transition={{
-          duration: 0.7,
-          ease: [0.16, 1, 0.3, 1],
-          delay: 0.06 * index,
+    <motion.li
+      ref={ref}
+      className="grid grid-cols-[64px_1fr] md:grid-cols-[80px_1fr] gap-6 border-t border-[var(--border)] py-8 md:py-10 transition-colors duration-200 hover:bg-[var(--bg)]/40"
+      initial={reduce ? false : { opacity: 0, y: 8 }}
+      animate={inView ? { opacity: 1, y: 0 } : undefined}
+      transition={{ duration: 0.42, delay: index * 0.04, ease: EASE_OUT_QUINT }}
+    >
+      <span
+        className="ltr-mono pt-1"
+        style={{
+          fontFamily: "var(--font-mono), monospace",
+          fontSize: "12px",
+          letterSpacing: "0.08em",
+          color: inView ? "var(--gold-bright)" : "var(--fg-faint)",
+          transition: "color 200ms var(--ease-out-quint)",
         }}
-        className="rtl:md:[--x:16px]"
       >
-        <div className="force-ltr flex items-baseline gap-4">
-          <span
-            className="select-none"
-            style={{
-              fontFamily: "var(--font-display), serif",
-              fontSize: "clamp(48px, 6vw, 72px)",
-              lineHeight: 1,
-              letterSpacing: "-0.02em",
-              color: "var(--gold-soft)",
-            }}
-          >
-            {step.num}
-          </span>
-          <h3
-            className="text-[var(--fg)]"
-            style={{
-              fontSize: "clamp(20px, 2vw, 24px)",
-              fontWeight: 500,
-              letterSpacing: "-0.01em",
-            }}
-          >
-            {step.title}
-          </h3>
-        </div>
-        <p
-          className="mt-4 max-w-[60ch] text-[var(--fg-muted)]"
-          style={{ fontSize: "16px", lineHeight: 1.6 }}
-        >
+        {step.num}
+      </span>
+      <div>
+        <h3 className="t-body-lg font-medium text-[var(--fg)] uppercase tracking-[0.06em]">
+          {step.title}
+        </h3>
+        <p className="mt-2 t-body text-[var(--fg-secondary)] max-w-[640px]">
           {step.body}
         </p>
-      </motion.div>
-    </li>
+      </div>
+    </motion.li>
   );
 }
 
 function SplitColumn({
   label,
   items,
-  accent,
+  border,
 }: {
   label: string;
   items: string[];
-  accent?: boolean;
+  border?: boolean;
 }) {
   return (
-    <div className="p-8 md:p-10">
-      <p
-        className="font-mono text-[11px] uppercase tracking-[0.2em]"
-        style={{
-          fontFamily: "var(--font-mono), monospace",
-          color: accent ? "var(--gold)" : "var(--fg-muted)",
-        }}
-      >
+    <div
+      className="py-10 md:py-12"
+      style={{
+        borderInlineStart: border ? "1px solid var(--border)" : undefined,
+        paddingInlineStart: border ? "clamp(20px, 3vw, 48px)" : undefined,
+        paddingInlineEnd: !border ? "clamp(20px, 3vw, 48px)" : undefined,
+      }}
+    >
+      <Mono size={11} tone="muted">
         {label}
-      </p>
+      </Mono>
       <ul className="mt-6 space-y-3">
         {items.map((item, i) => (
           <li
             key={i}
-            className="flex gap-3 text-[var(--fg)]"
-            style={{ fontSize: "15px", lineHeight: 1.6 }}
+            className="flex gap-3 text-[var(--fg-secondary)] t-body"
           >
-            <span
-              aria-hidden
-              className="select-none text-[var(--gold)]/60"
-              style={{ marginTop: "2px" }}
-            >
-              —
-            </span>
+            <span aria-hidden className="text-[var(--fg-faint)] select-none">—</span>
             <span>{item}</span>
           </li>
         ))}

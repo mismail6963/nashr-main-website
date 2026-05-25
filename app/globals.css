@@ -1,137 +1,228 @@
 @import "tailwindcss";
 
-/* ---------------------------------------------------------------- *
- * NASHR — design tokens
- * Colors are CSS variables so we never lose contrast across nesting.
- * ---------------------------------------------------------------- */
+/* ============================================================
+ * NASHR v2 — Linear-style design tokens
+ * Monochrome canvas, surgical gold accent, hairline-only dividers.
+ * ============================================================ */
 
 @theme {
-  /* Surfaces */
-  --color-bg: #07101c;
-  --color-bg-elevated: #0c1a2a;
-  --color-bg-card: #0f2236;
-  --color-navy: #0c243c;
-  /* Brand */
-  --color-gold: #a48f60;
-  --color-gold-bright: #d4b872;
-  /* Text */
-  --color-fg: #f2efe8;
-  --color-fg-muted: #8a95a4;
-  --color-fg-faint: #4a5567;
+  --color-bg: #08090A;
+  --color-bg-elevated: #0E0F11;
+  --color-bg-card: #111214;
+  --color-fg: #F7F8F8;
+  --color-fg-secondary: #B4B8BD;
+  --color-fg-muted: #8A8F98;
+  --color-fg-faint: #62666D;
+  --color-gold: #A48F60;
+  --color-gold-bright: #C7B27A;
 
-  /* Fonts (wired to next/font CSS variables) */
-  --font-display: var(--font-display);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-arabic: var(--font-arabic);
 
-  /* Fluid type scale */
-  --text-display: clamp(56px, 9vw, 144px);
-  --text-h1: clamp(40px, 5.5vw, 80px);
-  --text-h2: clamp(28px, 3.2vw, 48px);
-  --text-body-lg: clamp(17px, 1.3vw, 20px);
+  /* Breakpoints — explicit, per the responsive spec */
+  --breakpoint-xs: 360px;
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
 }
 
 :root {
-  --bg: #07101c;
-  --bg-elevated: #0c1a2a;
-  --bg-card: #0f2236;
-  --surface-line: rgba(164, 143, 96, 0.10);
-  --navy: #0c243c;
-  --gold: #a48f60;
-  --gold-bright: #d4b872;
-  --gold-soft: rgba(164, 143, 96, 0.16);
-  --fg: #f2efe8;
-  --fg-muted: #8a95a4;
-  --fg-faint: #4a5567;
+  --bg: #08090A;
+  --bg-elevated: #0E0F11;
+  --bg-card: #111214;
 
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --border: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.10);
+
+  --fg: #F7F8F8;
+  --fg-secondary: #B4B8BD;
+  --fg-muted: #8A8F98;
+  --fg-faint: #62666D;
+
+  --gold: #A48F60;
+  --gold-bright: #C7B27A;
+  --gold-faint: rgba(164, 143, 96, 0.12);
+
+  --selection: rgba(199, 178, 122, 0.25);
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.6, 1);
+
+  --page-pad: clamp(20px, 4vw, 64px);
+  --section-pad: clamp(120px, 14vw, 240px);
+  --container: 1320px;
 }
 
-html {
+::selection { background: var(--selection); color: var(--fg); }
+
+html, body {
   background: var(--bg);
   color: var(--fg);
-  scrollbar-gutter: stable;
-}
-
-html[dir="rtl"] body {
-  font-family: var(--font-arabic), system-ui, sans-serif;
-}
-
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-sans), system-ui, sans-serif;
-  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+html {
+  scrollbar-gutter: stable;
+  scroll-behavior: auto; /* Lenis handles smoothness */
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans), "Inter Tight", "Inter", system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
   overflow-x: hidden;
 }
 
-/* Mono elements stay LTR even in RTL layouts (numerals like 01 / WHAT IS NASHR) */
-[dir="rtl"] .force-ltr {
+/* ============================================================
+ * PER-LOCALE TYPOGRAPHY — the v1 failure mode
+ * Latin gets tight negative tracking; Arabic gets zero tracking
+ * and larger line-height. Scales DO NOT share between locales.
+ * ============================================================ */
+
+:lang(en), html[lang="en"] {
+  font-family: var(--font-sans), "Inter Tight", "Inter", system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+:lang(ar), html[lang="ar"] {
+  font-family: var(--font-arabic), "IBM Plex Sans Arabic", "Noto Sans Arabic", "Tajawal", sans-serif;
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+
+html[lang="ar"] body {
+  font-family: var(--font-arabic), "IBM Plex Sans Arabic", "Noto Sans Arabic", "Tajawal", sans-serif;
+}
+
+/* ---- Type scale: Latin (en) ---- */
+html[lang="en"] .t-display {
+  font-size: clamp(72px, 10vw, 168px);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  font-weight: 500;
+}
+html[lang="en"] .t-h1 {
+  font-size: clamp(48px, 6vw, 96px);
+  line-height: 1.0;
+  letter-spacing: -0.04em;
+  font-weight: 500;
+}
+html[lang="en"] .t-h2 {
+  font-size: clamp(32px, 3.5vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+}
+html[lang="en"] .t-body-lg {
+  font-size: clamp(18px, 1.3vw, 22px);
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+}
+html[lang="en"] .t-body {
+  font-size: 16px;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+}
+
+/* ---- Type scale: Arabic (ar) ---- */
+html[lang="ar"] .t-display {
+  font-size: clamp(56px, 8vw, 128px);
+  line-height: 1.15;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+html[lang="ar"] .t-h1 {
+  font-size: clamp(40px, 5vw, 80px);
+  line-height: 1.2;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+html[lang="ar"] .t-h2 {
+  font-size: clamp(28px, 3vw, 48px);
+  line-height: 1.25;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+html[lang="ar"] .t-body-lg {
+  font-size: clamp(17px, 1.2vw, 20px);
+  line-height: 1.7;
+  letter-spacing: 0;
+}
+html[lang="ar"] .t-body {
+  font-size: 16px;
+  line-height: 1.8;
+  letter-spacing: 0;
+}
+
+/* ---- Mono — locale-agnostic, kept LTR + Latin always ---- */
+.font-mono {
+  font-family: var(--font-mono), "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace !important;
+  font-feature-settings: "ss02";
+  letter-spacing: 0.04em;
+  font-style: normal;
+}
+.t-mono {
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+.t-mono-sm {
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+}
+
+/* Force LTR + Latin font on mono labels inside Arabic prose */
+[dir="rtl"] .ltr-mono,
+html[lang="ar"] .ltr-mono {
   direction: ltr;
   unicode-bidi: isolate;
+  font-family: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
+  letter-spacing: 0.04em;
 }
 
-/* Selection */
-::selection {
-  background: var(--gold-soft);
-  color: var(--fg);
+/* ============================================================
+ * Layout primitives
+ * ============================================================ */
+
+.container-page {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--page-pad);
 }
 
-/* Focus ring — 2px gold offset 2px, applied via .focus-ring or :focus-visible */
+.section-pad {
+  padding-block: var(--section-pad);
+}
+
+.hairline {
+  border-top: 1px solid var(--border);
+}
+.hairline-strong {
+  border-top: 1px solid var(--border-strong);
+}
+
+/* Performance: defer below-the-fold rendering */
+.below-fold {
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px 800px;
+}
+
+/* ============================================================
+ * Focus & accessibility
+ * ============================================================ */
+
 :focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 2px;
   border-radius: 2px;
 }
 
-/* Lenis smooth scroll — required reset */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: clip;
-}
-
-/* Reduced motion: kill drift + parallax + counters animation hooks */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
-  .motion-drift,
-  .motion-parallax {
-    animation: none !important;
-    transform: none !important;
-  }
-}
-
-/* Utility: hide native cursor on hover-capable devices (custom cursor takes over) */
-@media (hover: hover) and (pointer: fine) {
-  html.cursor-active,
-  html.cursor-active * {
-    cursor: none !important;
-  }
-}
-
-/* Skip link */
 .skip-link {
   position: fixed;
   top: -100px;
@@ -139,14 +230,165 @@ html.lenis body {
   transform: translateX(-50%);
   padding: 12px 20px;
   background: var(--gold);
-  color: var(--navy);
+  color: #08090A;
   font-family: var(--font-mono), monospace;
   font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  z-index: 9999;
-  transition: top 200ms var(--ease-out-expo);
+  letter-spacing: 0.08em;
+  z-index: 1000;
+  transition: top 180ms var(--ease-out-quint);
 }
-.skip-link:focus {
-  top: 16px;
+.skip-link:focus { top: 16px; }
+
+/* ============================================================
+ * Lenis smooth scroll (only when active)
+ * ============================================================ */
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+
+/* ============================================================
+ * Reduced motion — disable all transforms, keep colour
+ * ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    transform: none !important;
+  }
+  /* Connector arrow rests at 0.7 opacity per brief */
+  .connector-arrow {
+    animation: none !important;
+    opacity: 0.7 !important;
+  }
+}
+
+/* ============================================================
+ * Architectural decoration — full-page hairlines, watermarks,
+ * dot grid, status badges. Strict z-index discipline so nothing
+ * leaks above content or blocks pointer events.
+ * ============================================================ */
+
+.page-frame {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--container);
+  height: 100vh;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  z-index: 5;
+}
+
+/* Hero internal quarter guides — only inside the hero section */
+.hero-guides {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  max-width: var(--container);
+  margin-inline: auto;
+}
+.hero-guides::before,
+.hero-guides::after,
+.hero-guides > .g-25,
+.hero-guides > .g-75 {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.hero-guides::before { left: 50%; background: rgba(255, 255, 255, 0.06); }
+.hero-guides::after  { left: 12.5%; }
+.hero-guides > .g-25 { left: 25%; background: rgba(255, 255, 255, 0.05); }
+.hero-guides > .g-75 { left: 75%; background: rgba(255, 255, 255, 0.05); }
+
+/* Section watermark — large faded numeral behind section content */
+.section-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(180px, 22vw, 320px);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.02);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+/* Dot grid — used behind §03 */
+.dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: 0 0;
+}
+
+/* Status badge — top-right corner of capability cells */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--border-strong);
+  color: var(--fg-faint);
+}
+.status-badge.is-active {
+  background: rgba(164, 143, 96, 0.10);
+  color: var(--gold-bright);
+}
+
+/* Sticky section label — used in the left col of section shells */
+.sticky-label {
+  position: sticky;
+  top: 100px;
+  align-self: flex-start;
+  z-index: 10;
+}
+
+/* ============================================================
+ * The single sanctioned loop on the entire site:
+ * BEFORE → AFTER connector arrow, 2s nudge.
+ * Pure CSS so it costs zero JS frame budget.
+ * ============================================================ */
+
+@keyframes connector-nudge-ltr {
+  0%   { transform: translateX(0);    opacity: 0.55; }
+  50%  { transform: translateX(4px);  opacity: 1; }
+  100% { transform: translateX(0);    opacity: 0.55; }
+}
+@keyframes connector-nudge-rtl {
+  0%   { transform: translateX(0);     opacity: 0.55; }
+  50%  { transform: translateX(-4px);  opacity: 1; }
+  100% { transform: translateX(0);     opacity: 0.55; }
+}
+@keyframes connector-nudge-down {
+  0%   { transform: translateY(0);    opacity: 0.55; }
+  50%  { transform: translateY(4px);  opacity: 1; }
+  100% { transform: translateY(0);    opacity: 0.55; }
+}
+
+.connector-arrow {
+  animation: connector-nudge-ltr 2000ms var(--ease-in-out) infinite;
+  will-change: transform, opacity;
+}
+[dir="rtl"] .connector-arrow.horizontal {
+  animation-name: connector-nudge-rtl;
+}
+.connector-arrow.vertical {
+  animation-name: connector-nudge-down;
 }

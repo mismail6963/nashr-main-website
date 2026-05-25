@@ -1,203 +1,124 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/Button";
+import { Mono } from "@/components/ui/Mono";
 import { HeroVisual } from "@/components/sections/HeroVisual";
 import { getContactLinks } from "@/lib/contact";
+import { SplitText } from "@/components/motion/SplitText";
+import { EASE_OUT_QUINT } from "@/lib/motion";
 
+/**
+ * Hero — Linear-style sans-serif headline, with one gold-accent word.
+ * No serif. No italic. No magnetic anything.
+ *
+ * The right-side visual is the BEFORE/AFTER BrowserFrame composition (§6.2).
+ *
+ * Load reveal sequence (§7.1):
+ *  120ms  eyebrow
+ *  200ms  headline (word-by-word, 60ms apart, 420ms each)
+ *  400ms  visual (fade + scale 0.98 → 1, 720ms)
+ *  600ms  subhead
+ *  750ms  CTAs
+ *  900ms  trust
+ */
 export function Hero() {
   const t = useTranslations("hero");
   const locale = useLocale();
+  const isAr = locale === "ar";
   const { calcom } = getContactLinks(locale);
+  const reduce = useReducedMotion();
 
-  // The hero headline is intentionally split into 4 lines so the masked
-  // word-reveal staggers line-by-line. The italic+gold word "actually"
-  // (or its Arabic counterpart) lives on line 3.
-  const headlineLines = (t.raw("headlineLines") as string[]) ?? [];
-  const accentIndex = (t.raw("accentLineIndex") as number) ?? 2;
+  // Word array: [{text, accent?}]. Built from message JSON.
+  const headlineWords = (t.raw("headlineWords") as Array<
+    string | { text: string; accent?: boolean }
+  >) ?? [];
 
   const trustItems = (t.raw("trust") as string[]) ?? [];
 
-  // Word reveal: each word slides up from below an overflow-hidden mask.
-  // We do it inline here (instead of using <TextReveal />) because we
-  // need precise per-line and per-word control for the italic-gold accent.
-  const wordVariant = {
-    hidden: { y: "110%" },
-    visible: {
-      y: "0%",
-      transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
-    },
-  };
+  const fade = (delay: number, duration = 0.3) =>
+    reduce
+      ? { initial: false }
+      : {
+          initial: { opacity: 0, y: 8 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration, delay, ease: EASE_OUT_QUINT },
+        };
 
   return (
     <section
       id="hero"
-      className="relative flex min-h-screen items-center px-6 pb-32 pt-32 md:px-10 md:pt-40"
+      className="relative min-h-screen flex items-center pt-32 md:pt-28 pb-24 md:pb-32 overflow-hidden"
     >
-      <div className="mx-auto grid w-full max-w-[1280px] grid-cols-1 items-center gap-16 md:grid-cols-12">
-        {/* Left: content (7 cols on desktop) */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          className="md:col-span-7"
-        >
-          {/* Eyebrow */}
-          <motion.p
-            variants={{
-              hidden: { opacity: 0, y: 12 },
-              visible: { opacity: 1, y: 0 },
-            }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            className="force-ltr mb-8 inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--gold)]"
-            style={{ fontFamily: "var(--font-mono), monospace" }}
-          >
-            <span aria-hidden className="inline-block h-px w-6 bg-[var(--gold)]" />
-            {t("eyebrow")}
-          </motion.p>
+      {/* Hero internal quarter guides — vertical hairlines at 25/50/75% */}
+      <div aria-hidden className="hero-guides hidden md:block">
+        <span className="g-25" />
+        <span className="g-75" />
+      </div>
 
-          {/* Headline — 4 lines, masked word reveal */}
-          <h1
-            className="mb-10 text-[var(--fg)]"
-            style={{
-              fontFamily: "var(--font-display), serif",
-              fontSize: "var(--text-display)",
-              lineHeight: 0.94,
-              letterSpacing: "-0.02em",
-            }}
-          >
-            <span className="sr-only">{headlineLines.join(" ")}</span>
-            {headlineLines.map((line, lineIdx) => (
-              <span
-                key={lineIdx}
-                aria-hidden
-                className="block"
-              >
-                {line.split(" ").map((word, wIdx, arr) => {
-                  // Identify the single accent word on the accent line.
-                  // Convention: on the accent line, the FIRST word is the accent
-                  // (e.g. "actually" / "فعلاً"). Adjust later if needed.
-                  const isAccent =
-                    lineIdx === accentIndex && wIdx === 0;
-                  return (
-                    <span
-                      key={wIdx}
-                      className="inline-block overflow-hidden align-baseline"
-                      style={{
-                        marginInlineEnd:
-                          wIdx === arr.length - 1 ? 0 : "0.22em",
-                      }}
-                    >
-                      <motion.span
-                        variants={wordVariant}
-                        transition={{
-                          delay: 0.18 + lineIdx * 0.08 + wIdx * 0.03,
-                        }}
-                        className={
-                          isAccent
-                            ? "inline-block italic text-[var(--gold-bright)]"
-                            : "inline-block"
-                        }
-                      >
-                        {word}
-                      </motion.span>
-                    </span>
-                  );
-                })}
-              </span>
-            ))}
-          </h1>
+      <div className="container-page grid w-full grid-cols-12 gap-6 md:gap-6 items-center relative">
+        {/* Left: content (full on md-, 7/12 on lg+) */}
+        <div className="col-span-12 lg:col-span-7">
+          {/* Eyebrow — 120ms */}
+          <motion.div {...fade(0.12, 0.18)} className="mb-8 md:mb-10">
+            <Mono size={12} tone="muted">
+              {t("eyebrow")}
+            </Mono>
+          </motion.div>
 
-          {/* Sub-headline */}
+          {/* Headline — 200ms, word-by-word */}
+          <SplitText
+            as="h1"
+            className="t-display text-[var(--fg)] mb-8 md:mb-10"
+            words={headlineWords}
+            ariaLabel={t("headlineAria")}
+            onMount
+            delay={0.2}
+            stagger={0.06}
+            duration={0.42}
+          />
+
+          {/* Subhead — 600ms */}
           <motion.p
-            variants={{
-              hidden: { opacity: 0, y: 12 },
-              visible: { opacity: 1, y: 0 },
-            }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.9 }}
-            className="mb-10 max-w-[520px] text-[var(--fg-muted)]"
-            style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.55 }}
+            {...fade(0.6, 0.3)}
+            className="t-body-lg text-[var(--fg-secondary)] mb-10 max-w-[520px]"
           >
             {t("sub")}
           </motion.p>
 
-          {/* CTAs */}
+          {/* CTAs — 750ms */}
           <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 12 },
-              visible: { opacity: 1, y: 0 },
-            }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 1.05 }}
-            className="mb-10 flex flex-wrap items-center gap-4"
+            {...fade(0.75, 0.24)}
+            className="mb-10 flex flex-wrap items-center gap-3"
           >
             <Button variant="primary" href={calcom} external>
               {t("ctaPrimary")}
             </Button>
-            <Button variant="ghost" href="#how">
+            <Button variant="secondary" href="#how">
               {t("ctaSecondary")}
+              <span aria-hidden className="ms-1">{isAr ? "←" : "→"}</span>
             </Button>
           </motion.div>
 
-          {/* Trust strip */}
-          <motion.ul
-            variants={{
-              hidden: { opacity: 0 },
-              visible: { opacity: 1 },
-            }}
-            transition={{ duration: 0.7, delay: 1.25 }}
-            className="force-ltr flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--fg-faint)]"
-            style={{ fontFamily: "var(--font-mono), monospace" }}
-          >
-            {trustItems.map((item, i) => (
-              <li key={i} className="flex items-center gap-3">
-                {i > 0 && (
-                  <span aria-hidden className="text-[var(--gold)]/40">
-                    ·
-                  </span>
-                )}
-                <span>{item}</span>
-              </li>
-            ))}
-          </motion.ul>
-        </motion.div>
-
-        {/* Right: visual (5 cols on desktop) */}
-        <div className="md:col-span-5">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
-            className="relative"
-          >
-            <HeroVisual />
+          {/* Trust strip — 900ms */}
+          <motion.div {...fade(0.9, 0.24)}>
+            <Mono size={11} tone="faint">
+              {trustItems.join(" · ")}
+            </Mono>
           </motion.div>
         </div>
-      </div>
 
-      {/* Scroll cue */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.6, duration: 0.6 }}
-        className="absolute inset-x-0 bottom-8 flex flex-col items-center gap-3"
-      >
+        {/* Right: BEFORE/AFTER visual — 400ms */}
         <motion.div
-          aria-hidden
-          className="h-8 w-px"
-          style={{
-            background:
-              "linear-gradient(to bottom, transparent, var(--gold), transparent)",
-          }}
-          animate={{ opacity: [0, 1, 0] }}
-          transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <span
-          className="font-mono text-[10px] uppercase tracking-[0.32em] text-[var(--fg-faint)]"
-          style={{ fontFamily: "var(--font-mono), monospace" }}
+          className="col-span-12 lg:col-span-5"
+          initial={reduce ? false : { opacity: 0, scale: 0.98 }}
+          animate={reduce ? undefined : { opacity: 1, scale: 1 }}
+          transition={{ duration: 0.72, delay: 0.4, ease: EASE_OUT_QUINT }}
         >
-          {t("scroll")}
-        </span>
-      </motion.div>
+          <HeroVisual />
+        </motion.div>
+      </div>
     </section>
   );
 }
