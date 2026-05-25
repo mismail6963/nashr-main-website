@@ -106,13 +106,6 @@ export function SectionCTA() {
         })}
       </div>
 
-      <Reveal delay={0.18}>
-        <p className="mt-14 text-center">
-          <Mono size={11} tone="faint">
-            {t("meta")}
-          </Mono>
-        </p>
-      </Reveal>
     </SectionShell>
   );
 }
