@@ -29,7 +29,12 @@
     "brokenStateTitle": "PAGE NOT FOUND",
     "brokenStateSub": "your customers leave",
     "featMobile": "MOBILE + CHAT",
-    "featBooking": "BOOKING"
+    "featBooking": "BOOKING",
+    "figure": {
+      "brokenUrl": "(no website)",
+      "afterCta": "BOOK A CALL",
+      "transformation": "THE NASHR TRANSFORMATION"
+    }
   },
   "what": {
     "ref": "WHAT IS NASHR",

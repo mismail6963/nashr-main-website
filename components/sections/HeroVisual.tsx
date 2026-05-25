@@ -141,7 +141,7 @@ export function HeroVisual() {
             <div className="flex-1">
               <BrowserWindow
                 variant="before"
-                url={isAr ? "❌ لا يوجد موقع" : "❌ no website"}
+                url={`❌ ${t("figure.brokenUrl")}`}
               >
                 <BeforeContent />
               </BrowserWindow>
@@ -170,9 +170,16 @@ export function HeroVisual() {
         </motion.div>
 
         <figcaption className="mt-4 text-center">
-          <Mono size={11} tone="faint">
-            FIG 0.1 — {isAr ? "تحول نَشْر" : "THE NASHR TRANSFORMATION"}
-          </Mono>
+          <span
+            dir="ltr"
+            className="font-mono t-mono-sm uppercase text-[var(--fg-faint)]"
+            style={{ fontFamily: "var(--font-mono), monospace" }}
+          >
+            FIG 0.1 —
+          </span>{" "}
+          <span className="t-mono-sm text-[var(--fg-faint)] section-ref-label">
+            {t("figure.transformation")}
+          </span>
         </figcaption>
       </figure>
     </motion.div>
@@ -288,19 +295,19 @@ function BeforeContent() {
         aria-hidden
         style={{ color: "var(--fg-faint)", opacity: 0.6 }}
       />
-      <div className="text-center">
-        <Mono size={11} tone="faint">
+      <div className="text-center max-w-full">
+        {/* Title uses .section-ref-label so EN gets mono uppercase,
+            AR gets IBM Plex Sans Arabic — no Latin fallback boxes. */}
+        <span className="section-ref-label" style={{ color: "var(--fg-faint)" }}>
           {t("brokenStateTitle")}
-        </Mono>
+        </span>
         <p
-          className="mt-1 t-mono-sm"
+          className="mt-1"
           style={{
             color: "var(--fg-faint)",
             opacity: 0.7,
-            fontFamily: "var(--font-sans), sans-serif",
-            letterSpacing: "-0.01em",
             fontSize: "11px",
-            textTransform: "none",
+            lineHeight: 1.4,
           }}
         >
           {t("brokenStateSub")}
@@ -366,20 +373,23 @@ function AfterContent({ isAr, reduce }: { isAr: boolean; reduce: boolean }) {
       </div>
 
       {/* Hero block — gold pill button + headline + body, all with subtle motion */}
-      <div className="relative mt-3.5 flex flex-col gap-1.5">
+      <div className="relative mt-3.5 flex flex-col gap-1.5 items-start rtl:items-end">
         {/* CTA */}
         <span
           className="rounded-full px-2 py-0.5"
           style={{
             background: "var(--gold)",
             color: "#08090A",
-            fontSize: "7px",
+            fontSize: isAr ? "8px" : "7px",
             fontWeight: 600,
-            letterSpacing: "0.06em",
+            letterSpacing: isAr ? "0" : "0.06em",
             width: "fit-content",
+            fontFamily: isAr
+              ? "var(--font-arabic), sans-serif"
+              : "var(--font-sans), sans-serif",
           }}
         >
-          BOOK A CALL
+          {t("figure.afterCta")}
         </span>
         {/* Headline stub w/ sweeping highlight */}
         <div

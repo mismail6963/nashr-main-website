@@ -27,9 +27,14 @@
     "before": "قبل",
     "after": "بعد",
     "brokenStateTitle": "الصفحة غير موجودة",
-    "brokenStateSub": "عملاؤك يذهبون",
+    "brokenStateSub": "عملاؤك يغادرون",
     "featMobile": "جوال + شات",
-    "featBooking": "حجز"
+    "featBooking": "حجز",
+    "figure": {
+      "brokenUrl": "(لا يوجد موقع)",
+      "afterCta": "احجز مكالمة",
+      "transformation": "تحول نَشْر"
+    }
   },
   "what": {
     "ref": "ما هو نَشْر",
