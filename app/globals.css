@@ -346,22 +346,6 @@ html.lenis, html.lenis body { height: auto; }
 .hero-guides > .g-25 { left: 25%; background: rgba(255, 255, 255, 0.05); }
 .hero-guides > .g-75 { left: 75%; background: rgba(255, 255, 255, 0.05); }
 
-/* Section watermark — large faded numeral behind section content */
-.section-watermark {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: var(--font-sans), sans-serif;
-  font-size: clamp(180px, 22vw, 320px);
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.02);
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-}
 
 /* Dot grid — used behind §03 */
 .dot-grid {
