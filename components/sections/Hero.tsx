@@ -7,6 +7,7 @@ import { Mono } from "@/components/ui/Mono";
 import { HeroVisual } from "@/components/sections/HeroVisual";
 import { getContactLinks } from "@/lib/contact";
 import { SplitText } from "@/components/motion/SplitText";
+import { AmbientMesh } from "@/components/ui/AmbientMesh";
 import { EASE_OUT_QUINT } from "@/lib/motion";
 
 /**
@@ -51,6 +52,9 @@ export function Hero() {
       id="hero"
       className="relative min-h-screen flex items-center pt-32 md:pt-28 pb-24 md:pb-32 overflow-hidden"
     >
+      {/* Ambient mesh — subtle WebGL-like backdrop behind the text column */}
+      <AmbientMesh variant="hero" />
+
       {/* Hero internal quarter guides — vertical hairlines at 25/50/75% */}
       <div aria-hidden className="hero-guides hidden md:block">
         <span className="g-25" />

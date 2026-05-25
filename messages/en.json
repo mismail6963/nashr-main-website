@@ -45,6 +45,14 @@
   "how": {
     "ref": "HOW WE WORK",
     "headline": "Six steps. No surprises. You stay in control the whole way.",
+    "chatPrompts": [
+      "Hi — we don't really have a site. Customers can't find us. Where do we start?",
+      "Sounds good. How do we figure out what it should actually look like?",
+      "And the price — how does that part work?",
+      "Okay we're in. What do we sign and when do you start?",
+      "Can we make changes once we see the design?",
+      "And launching — what happens at the end?"
+    ],
     "steps": [
       { "num": "01", "title": "First contact", "body": "A call, a WhatsApp message, an email, or a visit. Whichever way works for you. We listen first." },
       { "num": "02", "title": "Free mockup call", "body": "We sit down — in person or on a call — walk through your business, and show you a free design mockup of what your site could look like. No payment, no commitment." },

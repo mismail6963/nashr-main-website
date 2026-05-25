@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { SectionShell } from "@/components/ui/SectionShell";
 import { Reveal } from "@/components/motion/Reveal";
 import { CountUp } from "@/components/ui/CountUp";
+import { AmbientMesh } from "@/components/ui/AmbientMesh";
 
 type Stat = { value: number; suffix: string; label: string };
 
@@ -31,9 +32,11 @@ export function SectionWhat() {
         </p>
       </Reveal>
 
-      {/* Stats — 3 cells in a single hairline sheet */}
+      {/* Stats — 3 cells in a single hairline sheet, with ambient mesh behind */}
       <Reveal delay={0.15}>
-        <div className="mt-20 md:mt-24 grid grid-cols-1 md:grid-cols-3 gap-px bg-[var(--border)] border border-[var(--border)]">
+        <div className="relative mt-20 md:mt-24">
+          <AmbientMesh variant="stats" className="opacity-50" />
+          <div className="relative grid grid-cols-1 md:grid-cols-3 gap-px bg-[var(--border)] border border-[var(--border)]">
           {stats.map((stat, i) => (
             <div key={i} className="bg-[var(--bg)] p-10 md:p-12 flex flex-col gap-4 min-h-[260px]">
               <span
@@ -55,6 +58,7 @@ export function SectionWhat() {
               </p>
             </div>
           ))}
+          </div>
         </div>
       </Reveal>
     </SectionShell>
