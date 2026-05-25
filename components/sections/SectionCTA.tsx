@@ -61,16 +61,13 @@ export function SectionCTA() {
               <a
                 href={hrefs[i]}
                 {...ext}
-                className="group block relative h-full bg-[var(--bg-card)] border border-[var(--border)] hover:border-[var(--gold)]/40 hover:bg-[var(--bg-elevated)] transition-colors duration-200 p-8 md:p-10 min-h-[240px] flex flex-col justify-between overflow-hidden"
+                className="group block relative h-full bg-[var(--bg-card)] border border-[var(--border)] hover:border-[var(--gold)]/40 hover:bg-[var(--bg-elevated)] transition-colors duration-200 p-8 md:p-10 min-h-[240px] flex flex-col overflow-hidden"
               >
-                {/* Hover preview slot — pinned to logical end (top-right LTR / top-left RTL) */}
-                <div className="absolute top-6" style={{ insetInlineEnd: "24px" }}>
-                  <TilePreview index={i} />
-                </div>
-
-                {/* Icon row — flex defaults to flex-start which respects direction:
-                    icon sits at the left in LTR and at the right in RTL */}
-                <div className="flex">
+                {/* Icon — absolute at logical START corner (top-left LTR / top-right RTL) */}
+                <div
+                  className="absolute"
+                  style={{ top: "32px", insetInlineStart: "32px" }}
+                >
                   <Icon
                     size={20}
                     strokeWidth={1.5}
@@ -79,23 +76,39 @@ export function SectionCTA() {
                   />
                 </div>
 
-                <div className="mt-10 text-start">
-                  {/* 'OPEN' / 'افتح' — Mono in EN, Arabic font in AR via .section-ref-label */}
-                  <p>
-                    <span className="section-ref-label" style={{ color: "var(--fg-faint)" }}>
-                      {tile.cta}
-                    </span>
-                  </p>
-                  <h3 className="mt-2 t-body-lg font-medium text-[var(--fg)] group-hover:text-[var(--gold-bright)] transition-colors duration-200">
+                {/* Hover preview — absolute at logical END corner (top-right LTR / top-left RTL) */}
+                <div
+                  className="absolute"
+                  style={{ top: "24px", insetInlineEnd: "24px" }}
+                >
+                  <TilePreview index={i} />
+                </div>
+
+                {/* Body content — text-start auto-aligns right in RTL.
+                    mt-16 clears the absolute-positioned icon. */}
+                <div className="mt-16 text-start">
+                  <h3 className="t-body-lg font-medium text-[var(--fg)] group-hover:text-[var(--gold-bright)] transition-colors duration-200">
                     {tile.channel}
                   </h3>
                   <p className="mt-2 t-body text-[var(--fg-secondary)]">
                     {tile.body}
                   </p>
+                </div>
+
+                {/* Bottom row — OPEN/افتح + arrow — pushed to logical END via ms-auto
+                    (right in LTR, left in RTL). The arrow glyph flips per locale
+                    so it always points 'forward' in the reading direction. */}
+                <div className="mt-auto ms-auto pt-6 flex items-center gap-2">
+                  <span
+                    className="section-ref-label"
+                    style={{ color: "var(--fg-faint)" }}
+                  >
+                    {tile.cta}
+                  </span>
                   <span
                     aria-hidden
-                    className="mt-4 block w-fit ms-auto text-[var(--fg-faint)] transition-transform duration-200 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
-                    style={{ fontFamily: "var(--font-mono), monospace", fontSize: "12px" }}
+                    className="text-[var(--fg-faint)] transition-transform duration-200 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
+                    style={{ fontFamily: "var(--font-mono), monospace", fontSize: "13px" }}
                   >
                     {isAr ? "←" : "→"}
                   </span>
