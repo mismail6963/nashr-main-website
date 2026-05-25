@@ -2,15 +2,19 @@
 
 // Designed as a portfolio piece — demonstrates the kind of polish NASHR ships for clients.
 //
-// Hero FIG 0.1: an editorial figure that visualizes the NASHR transformation.
-// - BEFORE: a dim browser frame with a 404 / "your customers leave" state
-// - AFTER:  a fully built bilingual site preview with WhatsApp FAB, headline
-//           sweeping highlight, gold-accent CTA, EN/AR toggle, calendar booking
-// - Connector: a 1px track with 3 gold dots traveling left → right (RTL: right → left)
-// - 3D tilt on cursor proximity (max ±2.5°, spring-damped, hover-capable devices only)
-// - Scroll-driven scale + opacity (0.75 → 1 → 0.75 across viewport pass)
+// FIG 0.1 single-window redesign:
+// - One browser window, full width of the figure container (no BEFORE/AFTER split)
+// - Live chrome (3 colored traffic lights, nashr.sa URL pill, LIVE indicator)
+// - Interior: top nav stub (NASHR + nav rects + EN|AR pill), gold CTA pill,
+//   headline stub with a sweeping highlight on a 4s loop, 2 body stubs,
+//   3 icon-only feature cells (Smartphone / MessageCircle / CalendarDays),
+//   WhatsApp FAB bottom-corner with breathing glow on an 8s loop
+// - Zero translatable internal text → no clipping risk in /ar; the only
+//   string is the URL literal which stays English in both locales
+// - Scroll-scrubbed scale (0.85 → 1 → 0.85) and 3D cursor tilt preserved
+//   from the previous build; element positions auto-mirror via dir.
 
-import { useRef, type ReactNode } from "react";
+import { useRef } from "react";
 import {
   motion,
   useMotionValue,
@@ -21,13 +25,10 @@ import {
 } from "motion/react";
 import {
   MessageCircle,
-  Lock,
   Smartphone,
   CalendarDays,
-  CloudOff,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { Mono } from "@/components/ui/Mono";
 import { EASE_OUT_QUINT } from "@/lib/motion";
 
 export function HeroVisual() {
@@ -36,7 +37,7 @@ export function HeroVisual() {
   const isAr = locale === "ar";
   const reduce = useReducedMotion();
 
-  // Wrapper handles scroll-scrubbed scale + opacity per addendum §2
+  // Scroll-scrubbed scale + opacity. Unchanged from previous build.
   const wrapperRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: wrapperRef,
@@ -55,7 +56,7 @@ export function HeroVisual() {
   const scale = useSpring(scaleRaw, { stiffness: 200, damping: 30, mass: 0.6 });
   const opacity = useSpring(opacityRaw, { stiffness: 200, damping: 30, mass: 0.6 });
 
-  // 3D tilt on cursor proximity
+  // 3D tilt on cursor proximity. Unchanged.
   const figureRef = useRef<HTMLDivElement>(null);
   const tiltX = useMotionValue(0);
   const tiltY = useMotionValue(0);
@@ -87,41 +88,26 @@ export function HeroVisual() {
         ref={figureRef}
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
-        className="relative group/fig"
+        className="relative"
         style={{ perspective: "1200px" }}
       >
+        {/* Single browser window — full width of the figure container.
+            The 3D tilt is applied here; the chrome + interior live inside. */}
         <motion.div
-          className="relative rounded-[12px] border border-[var(--border)] bg-[var(--bg-elevated)] p-5 md:p-7"
+          className="relative overflow-hidden rounded-[12px] border bg-[var(--bg-card)]"
           style={
             reduce
-              ? undefined
+              ? { borderColor: "var(--border)" }
               : {
+                  borderColor: "var(--border)",
                   rotateX: tiltXSpring,
                   rotateY: tiltYSpring,
                   transformStyle: "preserve-3d",
                 }
           }
         >
-          {/* LIVE badge — mono, top-right of outer sheet */}
-          <span
-            aria-hidden
-            className="absolute z-20 font-mono pointer-events-none"
-            style={{
-              top: "16px",
-              insetInlineEnd: "16px",
-              background: "rgba(255,255,255,0.06)",
-              color: "var(--fg-faint)",
-              padding: "3px 7px",
-              borderRadius: "3px",
-              fontSize: "9px",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-            }}
-          >
-            LIVE v2.04
-          </span>
-
-          {/* AFTER backdrop glow */}
+          {/* AFTER backdrop glow — the only place gold reaches beyond the
+              surgical accent rule. Behind the bottom-right of the window. */}
           <div
             aria-hidden
             className="pointer-events-none absolute -z-10 hidden lg:block"
@@ -136,36 +122,12 @@ export function HeroVisual() {
             }}
           />
 
-          <div className="flex flex-col items-stretch gap-5 lg:flex-row lg:gap-3">
-            {/* BEFORE */}
-            <div className="flex-1">
-              <BrowserWindow
-                variant="before"
-                url={`❌ ${t("figure.brokenUrl")}`}
-              >
-                <BeforeContent />
-              </BrowserWindow>
-              <div className="mt-3 text-center">
-                <Mono size={11} tone="faint">{t("before")}</Mono>
-              </div>
-            </div>
+          {/* Browser title bar */}
+          <BrowserChrome />
 
-            {/* Connector — traveling dots */}
-            <Connector isAr={isAr} reduce={!!reduce} />
-
-            {/* AFTER */}
-            <div className="flex-1">
-              <BrowserWindow
-                variant="after"
-                url="🔒 nashr.sa"
-                showLive
-              >
-                <AfterContent isAr={isAr} reduce={!!reduce} />
-              </BrowserWindow>
-              <div className="mt-3 text-center">
-                <Mono size={11} tone="gold">{t("after")}</Mono>
-              </div>
-            </div>
+          {/* Browser content — 16:10 aspect for stable layout */}
+          <div className="relative w-full" style={{ aspectRatio: "16 / 10" }}>
+            <SiteInterior reduce={!!reduce} />
           </div>
         </motion.div>
 
@@ -186,164 +148,104 @@ export function HeroVisual() {
   );
 }
 
-/* ---------- Browser window chrome ---------- */
+/* ---------- Browser chrome (title bar) ---------- */
 
-function BrowserWindow({
-  variant,
-  url,
-  showLive,
-  children,
-}: {
-  variant: "before" | "after";
-  url: string;
-  showLive?: boolean;
-  children: ReactNode;
-}) {
-  const isBefore = variant === "before";
+function BrowserChrome() {
   return (
     <div
-      className="relative overflow-hidden rounded-[10px] border"
+      className="relative flex h-8 items-center px-4"
       style={{
-        borderColor: "var(--border)",
-        background: isBefore ? "var(--bg-elevated)" : "var(--bg-card)",
-        opacity: isBefore ? 0.7 : 1,
+        background: "var(--bg-elevated)",
+        borderBottom: "1px solid var(--border)",
       }}
     >
-      {/* Title bar */}
-      <div
-        className="relative flex h-7 items-center px-3"
-        style={{ borderBottom: "1px solid var(--border)" }}
-      >
-        <div className="absolute left-3 flex items-center gap-[6px]" dir="ltr">
-          <span
-            className="block h-2.5 w-2.5 rounded-full"
-            style={{ background: isBefore ? "rgba(255,95,87,0.4)" : "#FF5F57" }}
-          />
-          <span
-            className="block h-2.5 w-2.5 rounded-full"
-            style={{ background: isBefore ? "rgba(254,188,46,0.4)" : "#FEBC2E" }}
-          />
-          <span
-            className="block h-2.5 w-2.5 rounded-full"
-            style={{ background: isBefore ? "rgba(40,200,64,0.4)" : "#28C840" }}
-          />
-        </div>
-        <div
-          dir="ltr"
-          className="mx-auto flex h-5 items-center rounded-[4px] px-2 gap-1"
-          style={{
-            background: "var(--bg)",
-            border: "1px solid var(--border)",
-            minWidth: "150px",
-            justifyContent: "center",
-          }}
-        >
-          <span
-            className="font-mono whitespace-nowrap"
-            style={{
-              fontSize: "10px",
-              letterSpacing: "0.02em",
-              color: isBefore ? "var(--fg-faint)" : "var(--fg-secondary)",
-            }}
-          >
-            {url}
-          </span>
-          {showLive && (
-            <span
-              className="ml-1 inline-flex items-center gap-1 font-mono"
-              style={{
-                fontSize: "8px",
-                letterSpacing: "0.12em",
-                color: "#28C840",
-              }}
-            >
-              <span
-                className="inline-block h-1 w-1 rounded-full"
-                style={{ background: "#28C840" }}
-              />
-              LIVE
-            </span>
-          )}
-        </div>
+      {/* Traffic-light dots — LTR-anchored so they auto-flip via the dir
+          attribute on the html element. Live colors (not muted). */}
+      <div className="absolute left-4 flex items-center gap-[8px]" dir="ltr">
+        <span
+          aria-hidden
+          className="block h-3 w-3 rounded-full"
+          style={{ background: "#FF5F57" }}
+        />
+        <span
+          aria-hidden
+          className="block h-3 w-3 rounded-full"
+          style={{ background: "#FEBC2E" }}
+        />
+        <span
+          aria-hidden
+          className="block h-3 w-3 rounded-full"
+          style={{ background: "#28C840" }}
+        />
       </div>
-      {/* Content — 16:10 aspect ratio reserves space */}
-      <div className="relative w-full" style={{ aspectRatio: "16 / 10" }}>
-        {children}
-      </div>
-    </div>
-  );
-}
 
-/* ---------- BEFORE content: 404 / broken state ---------- */
-
-function BeforeContent() {
-  const t = useTranslations("hero");
-  return (
-    <div className="absolute inset-0 overflow-hidden flex flex-col items-center justify-center gap-3 px-4">
-      {/* Cross-hatch overlay — diagonal lines at 2% opacity */}
+      {/* URL pill — centered, with LIVE indicator beside it. Always LTR. */}
       <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
+        dir="ltr"
+        className="mx-auto flex h-6 items-center rounded-[6px] px-3 gap-2"
         style={{
-          background:
-            "repeating-linear-gradient(45deg, transparent 0 12px, rgba(255,255,255,0.02) 12px 13px)",
+          background: "var(--bg)",
+          border: "1px solid var(--border)",
+          minWidth: "200px",
+          justifyContent: "center",
         }}
-      />
-      <CloudOff
-        size={36}
-        strokeWidth={1.25}
-        aria-hidden
-        style={{ color: "var(--fg-faint)", opacity: 0.6 }}
-      />
-      <div className="text-center max-w-full">
-        {/* Title uses .section-ref-label so EN gets mono uppercase,
-            AR gets IBM Plex Sans Arabic — no Latin fallback boxes. */}
-        <span className="section-ref-label" style={{ color: "var(--fg-faint)" }}>
-          {t("brokenStateTitle")}
-        </span>
-        <p
-          className="mt-1"
+      >
+        <span
+          className="font-mono whitespace-nowrap"
           style={{
-            color: "var(--fg-faint)",
-            opacity: 0.7,
             fontSize: "11px",
-            lineHeight: 1.4,
+            letterSpacing: "0.02em",
+            color: "var(--fg-secondary)",
           }}
         >
-          {t("brokenStateSub")}
-        </p>
+          nashr.sa
+        </span>
+        <span
+          className="inline-flex items-center gap-1 font-mono"
+          style={{
+            fontSize: "9px",
+            letterSpacing: "0.12em",
+            color: "#28C840",
+          }}
+        >
+          <span
+            className="inline-block h-1 w-1 rounded-full"
+            style={{ background: "#28C840" }}
+          />
+          LIVE
+        </span>
       </div>
     </div>
   );
 }
 
-/* ---------- AFTER content: built bilingual site preview ---------- */
+/* ---------- Site interior (content area inside the browser window) ---------- */
 
-function AfterContent({ isAr, reduce }: { isAr: boolean; reduce: boolean }) {
-  const t = useTranslations("hero");
+function SiteInterior({ reduce }: { reduce: boolean }) {
   return (
-    <div className="absolute inset-0 overflow-hidden p-3">
+    <div className="absolute inset-0 overflow-hidden p-4 md:p-5">
       {/* Faint gold radial glow behind the hero block */}
       <div
         aria-hidden
         className="pointer-events-none absolute"
         style={{
-          inset: "10% 20% 50% 0",
+          inset: "10% 20% 40% 0",
           background:
             "radial-gradient(closest-side, rgba(164,143,96,0.10), transparent 70%)",
-          filter: "blur(40px)",
+          filter: "blur(50px)",
         }}
       />
 
-      {/* Top nav stub — wordmark + 3 nav rects + EN/AR pill */}
+      {/* Top nav: wordmark + nav rects + EN|AR pill — all LTR-anchored so
+          they auto-flip horizontal order via the html dir attribute */}
       <div className="relative flex items-center justify-between" dir="ltr">
         <div className="flex items-center gap-1">
           <span
-            className="h-1 w-1 rounded-full bg-[var(--gold)]"
             aria-hidden
+            className="h-1 w-1 rounded-full bg-[var(--gold)]"
           />
           <span
-            className="text-[8px] font-semibold tracking-[-0.03em]"
+            className="text-[9px] font-semibold tracking-[-0.03em]"
             style={{ color: "var(--fg)" }}
           >
             NASHR
@@ -367,34 +269,30 @@ function AfterContent({ isAr, reduce }: { isAr: boolean; reduce: boolean }) {
           }}
         >
           <span style={{ color: "var(--gold-bright)" }}>EN</span>
-          <span style={{ color: "var(--fg-faint)" }}>/</span>
+          <span style={{ color: "var(--fg-faint)" }}>|</span>
           <span style={{ color: "var(--fg-faint)" }}>AR</span>
         </div>
       </div>
 
-      {/* Hero block — gold pill button + headline + body, all with subtle motion */}
-      <div className="relative mt-3.5 flex flex-col gap-1.5 items-start rtl:items-end">
-        {/* CTA */}
+      {/* Hero block — items-start auto-flips to start side per direction
+          (left in LTR, right in RTL). Pure shape stubs, no text. */}
+      <div className="relative mt-5 flex flex-col gap-2 items-start">
+        {/* CTA pill — text-less gold bar */}
         <span
-          className="rounded-full px-2 py-0.5 whitespace-nowrap"
+          className="rounded-full"
           style={{
             background: "var(--gold)",
-            color: "#08090A",
-            fontSize: isAr ? "9px" : "8px",
-            fontWeight: 600,
-            letterSpacing: isAr ? "0" : "0.06em",
-            width: "fit-content",
-            fontFamily: isAr
-              ? "var(--font-arabic), sans-serif"
-              : "var(--font-sans), sans-serif",
+            width: "72px",
+            height: "12px",
           }}
-        >
-          {t("figure.afterCta")}
-        </span>
-        {/* Headline stub w/ sweeping highlight */}
+        />
+        {/* Headline stub with sweeping highlight — 4s loop */}
         <div
-          className="relative h-2 w-[80%] overflow-hidden rounded-sm"
-          style={{ background: "rgba(247, 248, 248, 0.85)" }}
+          className="relative mt-1 h-2.5 overflow-hidden rounded-sm"
+          style={{
+            background: "rgba(247, 248, 248, 0.85)",
+            width: "82%",
+          }}
         >
           {!reduce && (
             <motion.span
@@ -414,60 +312,47 @@ function AfterContent({ isAr, reduce }: { isAr: boolean; reduce: boolean }) {
             />
           )}
         </div>
-        {/* Body stub */}
+        {/* 2 body stubs */}
         <div
-          className="h-1 w-[70%] rounded-sm"
-          style={{ background: "rgba(180, 184, 189, 0.35)" }}
+          className="h-1.5 rounded-sm"
+          style={{ width: "72%", background: "rgba(180, 184, 189, 0.35)" }}
         />
         <div
-          className="h-1 w-[55%] rounded-sm"
-          style={{ background: "rgba(180, 184, 189, 0.25)" }}
+          className="h-1.5 rounded-sm"
+          style={{ width: "58%", background: "rgba(180, 184, 189, 0.25)" }}
         />
       </div>
 
-      {/* Lower row — 2 icon-only cells (no text labels, locale-agnostic) */}
-      <div className="absolute inset-x-3 bottom-3 grid grid-cols-2 gap-2">
-        <div
-          className="flex items-center justify-center rounded-[4px] border p-2 min-h-[28px]"
-          style={{
-            borderColor: "var(--border)",
-            background: "rgba(8,9,10,0.5)",
-          }}
-        >
-          <Smartphone
-            size={16}
-            strokeWidth={1.5}
-            style={{ color: "var(--fg-secondary)" }}
-            aria-hidden
-          />
-        </div>
-        <div
-          className="flex items-center justify-center rounded-[4px] border p-2 min-h-[28px]"
-          style={{
-            borderColor: "var(--border)",
-            background: "rgba(8,9,10,0.5)",
-          }}
-        >
-          <div className="relative">
-            <CalendarDays size={16} strokeWidth={1.5} style={{ color: "var(--fg-secondary)" }} aria-hidden />
-            <span
-              aria-hidden
-              className="absolute -bottom-0.5 -right-0.5 block h-1.5 w-1.5 rounded-full"
-              style={{ background: "var(--gold-bright)" }}
-            />
-          </div>
-        </div>
+      {/* Feature row — 3 icon-only cells. Stays in a single row even on
+          mobile per brief; the cells are square and the row is grid-3 so
+          it'll never wrap. Direction-agnostic — same in both locales. */}
+      <div className="absolute inset-x-4 bottom-4 md:inset-x-5 md:bottom-5 grid grid-cols-3 gap-2">
+        <FeatureCell icon={<Smartphone size={16} strokeWidth={1.5} />} />
+        <FeatureCell icon={<MessageCircle size={16} strokeWidth={1.5} />} />
+        <FeatureCell
+          icon={
+            <div className="relative">
+              <CalendarDays size={16} strokeWidth={1.5} />
+              <span
+                aria-hidden
+                className="absolute -bottom-0.5 -right-0.5 block h-1.5 w-1.5 rounded-full"
+                style={{ background: "var(--gold-bright)" }}
+              />
+            </div>
+          }
+        />
       </div>
 
-      {/* Floating WhatsApp FAB bottom-right outside the grid */}
+      {/* Floating WhatsApp FAB — logical end corner (bottom-right LTR,
+          bottom-left RTL) via inset-inline-end. Breathing glow 8s loop. */}
       <motion.div
         aria-hidden
         className="absolute"
         style={{
-          insetInlineEnd: "10px",
-          bottom: "10px",
-          width: "28px",
-          height: "28px",
+          insetInlineEnd: "12px",
+          bottom: "62px",
+          width: "30px",
+          height: "30px",
         }}
         animate={
           reduce
@@ -475,7 +360,7 @@ function AfterContent({ isAr, reduce }: { isAr: boolean; reduce: boolean }) {
             : {
                 boxShadow: [
                   "0 0 0 0 rgba(164,143,96,0)",
-                  "0 0 0 8px rgba(164,143,96,0.18)",
+                  "0 0 0 10px rgba(164,143,96,0.18)",
                   "0 0 0 0 rgba(164,143,96,0)",
                 ],
               }
@@ -486,84 +371,35 @@ function AfterContent({ isAr, reduce }: { isAr: boolean; reduce: boolean }) {
           className="flex h-full w-full items-center justify-center rounded-full"
           style={{ background: "var(--gold)" }}
         >
-          <MessageCircle size={14} strokeWidth={2} style={{ color: "#08090A" }} />
+          <MessageCircle size={15} strokeWidth={2} style={{ color: "#08090A" }} />
         </div>
       </motion.div>
 
-      {/* Padlock badge top-right tip — security signal */}
-      <span
-        aria-hidden
-        className="absolute"
-        style={{ top: "9px", insetInlineEnd: "60px" }}
-      >
-        <Lock size={9} strokeWidth={2} style={{ color: "#28C840", opacity: 0.6 }} />
-      </span>
+      {/* Subtle reveal of the interior elements on first scroll-in — kept
+          to a single fade so it doesn't compete with the figure's own
+          scroll-scrubbed scale animation. */}
+      <motion.div
+        initial={reduce ? false : { opacity: 0 }}
+        whileInView={reduce ? undefined : { opacity: 1 }}
+        viewport={{ once: true, margin: "-10% 0px" }}
+        transition={{ duration: 0.5, ease: EASE_OUT_QUINT }}
+        className="pointer-events-none absolute inset-0"
+      />
     </div>
   );
 }
 
-/* ---------- Connector with traveling gold dots ---------- */
-
-function Connector({ isAr, reduce }: { isAr: boolean; reduce: boolean }) {
-  // 3 dots, 800ms offsets, 3s total. Mobile = X axis, desktop = Y axis.
-  // We render both sets and toggle visibility via responsive classes so
-  // the motion keyframes stay axis-specific (no diagonal drift).
-  const dots = [0, 0.8, 1.6];
+function FeatureCell({ icon }: { icon: React.ReactNode }) {
   return (
     <div
-      aria-hidden
-      className="relative flex items-center justify-center self-stretch py-2 lg:px-3 lg:py-0"
-      style={{ minHeight: "32px" }}
+      className="flex items-center justify-center rounded-[4px] border min-h-[32px]"
+      style={{
+        borderColor: "var(--border)",
+        background: "rgba(8,9,10,0.5)",
+        color: "var(--fg-secondary)",
+      }}
     >
-      {/* Track */}
-      <div
-        className="absolute bg-[var(--border-strong)]
-                   left-1/2 top-1/2 h-px w-[60%] -translate-x-1/2 -translate-y-1/2
-                   lg:left-auto lg:top-1/2 lg:h-[60%] lg:w-px lg:-translate-y-1/2 lg:translate-x-0"
-      />
-
-      {/* Mobile dots — travel along X */}
-      {!reduce &&
-        dots.map((delay, i) => (
-          <motion.span
-            key={`m-${i}`}
-            className="lg:hidden absolute h-1 w-1 rounded-full bg-[var(--gold)] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            style={{ boxShadow: "0 0 8px rgba(199,178,122,0.6)" }}
-            animate={{
-              x: isAr ? ["calc(30vw - 30px)", "calc(-30vw + 30px)"] : ["calc(-30vw + 30px)", "calc(30vw - 30px)"],
-              opacity: [0, 1, 1, 0],
-            }}
-            transition={{ duration: 3, delay, ease: "easeInOut", repeat: Infinity }}
-          />
-        ))}
-
-      {/* Desktop dots — travel along Y */}
-      {!reduce &&
-        dots.map((delay, i) => (
-          <motion.span
-            key={`d-${i}`}
-            className="hidden lg:block absolute h-1 w-1 rounded-full bg-[var(--gold)] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-            style={{ boxShadow: "0 0 8px rgba(199,178,122,0.6)" }}
-            animate={{
-              y: ["-80px", "80px"],
-              opacity: [0, 1, 1, 0],
-            }}
-            transition={{ duration: 3, delay, ease: "easeInOut", repeat: Infinity }}
-          />
-        ))}
-
-      {/* Static arrow tip */}
-      <span
-        aria-hidden
-        className="absolute font-mono text-[11px] text-[var(--gold-bright)]
-                   left-[calc(50%+22px)] top-1/2 -translate-y-1/2
-                   lg:left-1/2 lg:top-[calc(50%+22px)] lg:-translate-x-1/2 lg:translate-y-0"
-      >
-        <span className="lg:hidden">↓</span>
-        <span className="hidden lg:inline">{isAr ? "←" : "→"}</span>
-      </span>
+      {icon}
     </div>
   );
 }
-
-// (Globe was previously imported as a placeholder; removed to keep imports clean.)

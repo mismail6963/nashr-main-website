@@ -24,15 +24,7 @@
       "بدون اشتراكات شهرية",
       "٢–٤ جولات مراجعة"
     ],
-    "before": "قبل",
-    "after": "بعد",
-    "brokenStateTitle": "الصفحة غير موجودة",
-    "brokenStateSub": "عملاؤك يغادرون",
-    "featMobile": "جوال + شات",
-    "featBooking": "حجز",
     "figure": {
-      "brokenUrl": "(لا يوجد موقع)",
-      "afterCta": "احجز مكالمة",
       "transformation": "تحول نَشْر"
     }
   },
