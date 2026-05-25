@@ -177,14 +177,35 @@ html[lang="ar"] .t-body {
   letter-spacing: 0.08em;
 }
 
-/* Force LTR + Latin font on mono labels inside Arabic prose */
+/* Force LTR + Latin font on mono labels inside Arabic prose.
+   The font cascade now includes the Arabic family so any non-Latin
+   codepoints inside a mono label fall through cleanly to IBM Plex
+   Sans Arabic instead of a generic system fallback. */
 [dir="rtl"] .ltr-mono,
 html[lang="ar"] .ltr-mono {
   direction: ltr;
   unicode-bidi: isolate;
-  font-family: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
+  font-family: var(--font-mono), var(--font-arabic), "IBM Plex Sans Arabic", "JetBrains Mono", ui-monospace, monospace;
   letter-spacing: 0.04em;
 }
+
+/* Arabic mini-font bumps — Arabic glyphs render visually smaller than
+   Latin at equal px size, so the small UI tier (mono labels, body
+   small) needs to scale up in the AR locale to maintain hierarchy.
+   Applies to every mono utility AND to Latin technical labels (FIG 0.1,
+   LIVE v2.04, etc.) — those go from 11→13px in AR, still subtle but
+   readable next to the bumped Arabic text. */
+html[lang="ar"] .t-mono-sm {
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+html[lang="ar"] .t-mono {
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+
 
 /* ============================================================
  * Layout primitives
