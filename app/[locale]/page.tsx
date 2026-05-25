@@ -6,6 +6,7 @@ import { SectionWhat } from "@/components/sections/SectionWhat";
 import { SectionHow } from "@/components/sections/SectionHow";
 import { SectionHelp } from "@/components/sections/SectionHelp";
 import { SectionCTA } from "@/components/sections/SectionCTA";
+import { SectionDivider } from "@/components/ui/SectionDivider";
 
 export default async function HomePage({
   params,
@@ -20,9 +21,13 @@ export default async function HomePage({
       <Header />
       <main id="main" className="relative">
         <Hero />
+        <SectionDivider />
         <SectionWhat />
+        <SectionDivider />
         <SectionHow />
+        <SectionDivider />
         <SectionHelp />
+        <SectionDivider />
         <SectionCTA />
       </main>
       <Footer />

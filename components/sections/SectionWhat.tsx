@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { SectionShell } from "@/components/ui/SectionShell";
 import { Reveal } from "@/components/motion/Reveal";
+import { SplitText } from "@/components/motion/SplitText";
 import { CountUp } from "@/components/ui/CountUp";
 import { AmbientMesh } from "@/components/ui/AmbientMesh";
 
@@ -17,9 +18,13 @@ export function SectionWhat() {
 
   return (
     <SectionShell id="what" number="1.0" label={t("ref")} watermark="01">
-      <Reveal>
-        <h2 className="t-h1 max-w-[18ch] text-[var(--fg)]">{t("headline")}</h2>
-      </Reveal>
+      <SplitText
+        as="h2"
+        className="t-h1 max-w-[18ch] text-[var(--fg)]"
+        text={t("headline")}
+        ariaLabel={t("headline")}
+        stagger={0.06}
+      />
 
       <Reveal delay={0.06}>
         <p className="t-body-lg mt-10 text-[var(--fg-secondary)] max-w-[540px]">

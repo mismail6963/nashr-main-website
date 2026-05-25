@@ -19,6 +19,7 @@ import {
 import { SectionShell } from "@/components/ui/SectionShell";
 import { Mono } from "@/components/ui/Mono";
 import { Reveal } from "@/components/motion/Reveal";
+import { SplitText } from "@/components/motion/SplitText";
 import { cn } from "@/lib/utils";
 
 type Capability = {
@@ -72,9 +73,13 @@ export function SectionHelp() {
       watermark="03"
       dotGrid
     >
-      <Reveal>
-        <h2 className="t-h1 max-w-[22ch] text-[var(--fg)]">{t("headline")}</h2>
-      </Reveal>
+      <SplitText
+        as="h2"
+        className="t-h1 max-w-[22ch] text-[var(--fg)]"
+        text={t("headline")}
+        ariaLabel={t("headline")}
+        stagger={0.06}
+      />
 
       <Reveal delay={0.06}>
         <p className="t-body-lg mt-8 text-[var(--fg-secondary)] max-w-[600px]">

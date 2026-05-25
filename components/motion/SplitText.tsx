@@ -7,8 +7,9 @@ import { EASE_OUT_QUINT } from "@/lib/motion";
 type Word = string | { text: string; accent?: boolean };
 
 type Props = {
-  /** Pre-split words. Strings or {text, accent} objects (accent = gold). */
-  words: Word[];
+  /** Either pre-split words OR a plain string (auto-split on whitespace). */
+  words?: Word[];
+  text?: string;
   /** Tag for the wrapping element. */
   as?: "h1" | "h2" | "h3" | "p" | "span";
   /** Trigger on mount? Otherwise scroll-in once. */
@@ -35,6 +36,7 @@ type Props = {
  */
 export function SplitText({
   words,
+  text,
   as = "h1",
   onMount = false,
   stagger = 0.06,
@@ -47,21 +49,24 @@ export function SplitText({
   const reduce = useReducedMotion();
   const Tag = motion[as] as typeof motion.h1;
 
+  // If `text` was provided instead of `words`, auto-split on whitespace.
+  const resolvedWords: Word[] = words ?? (text ? text.split(/\s+/) : []);
+
   // Reduced motion: static render, no animation, no clip masks.
   if (reduce) {
     const StaticTag = as as keyof React.JSX.IntrinsicElements;
     return (
       <StaticTag className={className} style={style} aria-label={ariaLabel}>
-        {words.map((w, i) => {
+        {resolvedWords.map((w, i) => {
           const isObj = typeof w === "object";
-          const text = isObj ? w.text : w;
+          const wordText = isObj ? w.text : w;
           const accent = isObj && w.accent;
           return (
             <Fragment key={i}>
               <span style={accent ? { color: "var(--gold)" } : undefined}>
-                {text}
+                {wordText}
               </span>
-              {i < words.length - 1 && " "}
+              {i < resolvedWords.length - 1 && " "}
             </Fragment>
           );
         })}
@@ -80,9 +85,9 @@ export function SplitText({
       viewport={onMount ? undefined : { once: true, margin: "-10% 0px" }}
     >
       <span className="sr-only">{ariaLabel}</span>
-      {words.map((w, i) => {
+      {resolvedWords.map((w, i) => {
         const isObj = typeof w === "object";
-        const text = isObj ? w.text : w;
+        const wordText = isObj ? w.text : w;
         const accent = isObj && w.accent;
         return (
           <Fragment key={i}>
@@ -104,10 +109,10 @@ export function SplitText({
                   ease: EASE_OUT_QUINT,
                 }}
               >
-                {text}
+                {wordText}
               </motion.span>
             </span>
-            {i < words.length - 1 && " "}
+            {i < resolvedWords.length - 1 && " "}
           </Fragment>
         );
       })}

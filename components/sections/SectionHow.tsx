@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { SectionShell } from "@/components/ui/SectionShell";
 import { Mono } from "@/components/ui/Mono";
 import { Reveal } from "@/components/motion/Reveal";
+import { SplitText } from "@/components/motion/SplitText";
 import { EASE_OUT_QUINT } from "@/lib/motion";
 
 type Step = { num: string; title: string; body: string };
@@ -46,11 +47,13 @@ export function SectionHow() {
       watermark="02"
       elevated
     >
-      <Reveal>
-        <h2 className="t-h1 max-w-[24ch] text-[var(--fg)]">
-          {t("headline")}
-        </h2>
-      </Reveal>
+      <SplitText
+        as="h2"
+        className="t-h1 max-w-[24ch] text-[var(--fg)]"
+        text={t("headline")}
+        ariaLabel={t("headline")}
+        stagger={0.06}
+      />
 
       {/* Chat container */}
       <ChatThread steps={steps} clientPrompts={clientPrompts} />
