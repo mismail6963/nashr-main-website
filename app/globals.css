@@ -372,6 +372,24 @@ html.lenis, html.lenis body { height: auto; }
   color: var(--gold-bright);
 }
 
+/* Section ref label — per-locale font + sizing.
+   The "1.0 —" prefix stays mono+LTR; this targets the label after it. */
+html[lang="en"] .section-ref-label {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+html[lang="ar"] .section-ref-label {
+  font-family: var(--font-arabic), "IBM Plex Sans Arabic", sans-serif;
+  font-size: 15px;
+  letter-spacing: 0;
+  line-height: 1.4;
+  color: var(--fg-muted);
+}
+
 /* Sticky section label — used in the left col of section shells */
 .sticky-label {
   position: sticky;
