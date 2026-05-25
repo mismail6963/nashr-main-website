@@ -121,6 +121,7 @@ export default async function LocaleLayout({
         <a href="#main" className="skip-link">
           Skip to content
         </a>
+        <div aria-hidden className="page-frame" />
         <SmoothScroll />
         <NextIntlClientProvider messages={messages} locale={locale}>
           {children}

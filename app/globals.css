@@ -267,6 +267,100 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 /* ============================================================
+ * Architectural decoration — full-page hairlines, watermarks,
+ * dot grid, status badges. Strict z-index discipline so nothing
+ * leaks above content or blocks pointer events.
+ * ============================================================ */
+
+.page-frame {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--container);
+  height: 100vh;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  z-index: 5;
+}
+
+/* Hero internal quarter guides — only inside the hero section */
+.hero-guides {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  max-width: var(--container);
+  margin-inline: auto;
+}
+.hero-guides::before,
+.hero-guides::after,
+.hero-guides > .g-25,
+.hero-guides > .g-75 {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.hero-guides::before { left: 50%; background: rgba(255, 255, 255, 0.06); }
+.hero-guides::after  { left: 12.5%; }
+.hero-guides > .g-25 { left: 25%; background: rgba(255, 255, 255, 0.05); }
+.hero-guides > .g-75 { left: 75%; background: rgba(255, 255, 255, 0.05); }
+
+/* Section watermark — large faded numeral behind section content */
+.section-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(180px, 22vw, 320px);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.02);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+/* Dot grid — used behind §03 */
+.dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: 0 0;
+}
+
+/* Status badge — top-right corner of capability cells */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--border-strong);
+  color: var(--fg-faint);
+}
+.status-badge.is-active {
+  background: rgba(164, 143, 96, 0.10);
+  color: var(--gold-bright);
+}
+
+/* Sticky section label — used in the left col of section shells */
+.sticky-label {
+  position: sticky;
+  top: 100px;
+  align-self: flex-start;
+  z-index: 10;
+}
+
+/* ============================================================
  * The single sanctioned loop on the entire site:
  * BEFORE → AFTER connector arrow, 2s nudge.
  * Pure CSS so it costs zero JS frame budget.

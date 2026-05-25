@@ -49,9 +49,15 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center pt-32 md:pt-28 pb-24 md:pb-32"
+      className="relative min-h-screen flex items-center pt-32 md:pt-28 pb-24 md:pb-32 overflow-hidden"
     >
-      <div className="container-page grid w-full grid-cols-12 gap-6 md:gap-6 items-center">
+      {/* Hero internal quarter guides — vertical hairlines at 25/50/75% */}
+      <div aria-hidden className="hero-guides hidden md:block">
+        <span className="g-25" />
+        <span className="g-75" />
+      </div>
+
+      <div className="container-page grid w-full grid-cols-12 gap-6 md:gap-6 items-center relative">
         {/* Left: content (full on md-, 7/12 on lg+) */}
         <div className="col-span-12 lg:col-span-7">
           {/* Eyebrow — 120ms */}

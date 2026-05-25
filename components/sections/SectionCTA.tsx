@@ -7,7 +7,7 @@ import {
   Mail,
   type LucideIcon,
 } from "lucide-react";
-import { SectionRef } from "@/components/ui/SectionRef";
+import { SectionShell } from "@/components/ui/SectionShell";
 import { Mono } from "@/components/ui/Mono";
 import { Reveal } from "@/components/motion/Reveal";
 import { SplitText } from "@/components/motion/SplitText";
@@ -32,91 +32,76 @@ export function SectionCTA() {
   const external = [true, true, false];
 
   return (
-    <section id="contact" className="section-pad below-fold hairline">
-      <div className="container-page">
-        <Reveal>
-          <SectionRef number="4.0" label={t("ref")} />
-        </Reveal>
+    <SectionShell id="contact" number="4.0" label={t("ref")} watermark="04">
+      <div className="[text-wrap:balance]" style={{ maxWidth: "clamp(560px, 50vw, 880px)" }}>
+        <SplitText
+          as="h2"
+          className="t-h1 text-[var(--fg)] [text-wrap:balance]"
+          words={headlineWords}
+          ariaLabel={t("headlineAria")}
+          stagger={0.05}
+        />
+      </div>
 
-        {/* Headline — text-wrap: balance so it wraps to 2 lines max,
-            not word-by-word. */}
-        <div
-          className="mt-10 md:mt-12"
-          style={{
-            maxWidth: "clamp(720px, 50vw, 960px)",
-          }}
-        >
-          <SplitText
-            as="h2"
-            className="t-display text-[var(--fg)] [text-wrap:balance]"
-            words={headlineWords}
-            ariaLabel={t("headlineAria")}
-            delay={0}
-            stagger={0.05}
-            duration={0.42}
-          />
-        </div>
+      <Reveal delay={0.1}>
+        <p className="mt-8 t-body-lg text-[var(--fg-secondary)] max-w-[600px]">
+          {t("sub")}
+        </p>
+      </Reveal>
 
-        <Reveal delay={0.1}>
-          <p className="mt-8 t-body-lg text-[var(--fg-secondary)] max-w-[600px]">
-            {t("sub")}
-          </p>
-        </Reveal>
-
-        {/* Three hairline rows / columns. No card chrome. */}
-        <div className="mt-20 md:mt-24 grid grid-cols-1 md:grid-cols-3 border-t border-[var(--border)]">
-          {tiles.map((tile, i) => {
-            const Icon = ICONS[i] ?? Mail;
-            const ext = external[i]
-              ? { target: "_blank", rel: "noopener noreferrer" }
-              : {};
-            return (
+      {/* Three tiles. Surface-card bg, hairline border, gold-bright on hover. */}
+      <div className="mt-16 md:mt-20 grid grid-cols-1 md:grid-cols-3 gap-6">
+        {tiles.map((tile, i) => {
+          const Icon = ICONS[i] ?? Mail;
+          const ext = external[i]
+            ? { target: "_blank", rel: "noopener noreferrer" }
+            : {};
+          return (
+            <Reveal key={i} delay={0.05 + i * 0.05}>
               <a
-                key={i}
                 href={hrefs[i]}
                 {...ext}
-                className="group block border-b border-[var(--border)] md:border-b-0 py-10 md:py-12 transition-colors duration-150"
-                style={{
-                  borderInlineStart: i > 0 ? "1px solid var(--border)" : undefined,
-                  paddingInlineStart: i > 0 ? "clamp(20px, 3vw, 48px)" : undefined,
-                  paddingInlineEnd: i < tiles.length - 1 ? "clamp(20px, 3vw, 48px)" : undefined,
-                }}
+                className="group block h-full bg-[var(--bg-card)] border border-[var(--border)] hover:border-[var(--gold)]/40 hover:bg-[var(--bg-elevated)] transition-colors duration-200 p-8 md:p-10 min-h-[200px] flex flex-col justify-between"
               >
                 <Icon
                   size={20}
                   strokeWidth={1.5}
-                  style={{ color: "var(--fg-muted)" }}
+                  style={{ color: "var(--gold-bright)" }}
                   aria-hidden
                 />
-                <h3 className="mt-6 t-body-lg font-medium text-[var(--fg)] group-hover:text-[var(--gold)] transition-colors duration-150">
-                  {tile.channel}
-                </h3>
-                <p className="mt-3 t-body text-[var(--fg-secondary)]">
-                  {tile.body}
-                </p>
-                <div className="mt-8 inline-flex items-center gap-2">
-                  <Mono size={11} tone="faint">{tile.cta}</Mono>
+                <div className="mt-10">
+                  <p>
+                    <Mono size={11} tone="faint">
+                      {tile.cta}
+                    </Mono>
+                  </p>
+                  <h3 className="mt-2 t-body-lg font-medium text-[var(--fg)] group-hover:text-[var(--gold-bright)] transition-colors duration-200">
+                    {tile.channel}
+                  </h3>
+                  <p className="mt-2 t-body text-[var(--fg-secondary)]">
+                    {tile.body}
+                  </p>
                   <span
                     aria-hidden
-                    className="text-[var(--fg-faint)] transition-transform duration-150 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
-                    style={{ fontFamily: "var(--font-mono), monospace", fontSize: "11px" }}
+                    className="mt-4 inline-block text-[var(--fg-faint)] transition-transform duration-200 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
+                    style={{ fontFamily: "var(--font-mono), monospace", fontSize: "12px" }}
                   >
                     {isAr ? "←" : "→"}
                   </span>
                 </div>
               </a>
-            );
-          })}
-        </div>
-
-        <Reveal delay={0.15}>
-          <p className="mt-16 text-center">
-            <Mono size={11} tone="faint">
-              {t("meta")}
-            </Mono>
-          </p>
-        </Reveal>
+            </Reveal>
+          );
+        })}
       </div>
-    </section>
+
+      <Reveal delay={0.18}>
+        <p className="mt-14 text-center">
+          <Mono size={11} tone="faint">
+            {t("meta")}
+          </Mono>
+        </p>
+      </Reveal>
+    </SectionShell>
   );
 }

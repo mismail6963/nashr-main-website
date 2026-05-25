@@ -26,9 +26,32 @@ export function HeroVisual() {
     "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")";
 
   return (
-    <div className="relative">
-      {/* AFTER backdrop glow — the only place gold goes beyond surgical accents.
-          Positioned below+behind the AFTER frame. */}
+    <figure className="relative">
+      {/* Outer FIG sheet — wraps the BEFORE/AFTER composition with
+          a LIVE badge top-right and a caption below. Reads as an
+          editorial figure ("FIG 0.1 — THE NASHR TRANSFORMATION"). */}
+      <div className="relative rounded-[12px] border border-[var(--border)] bg-[var(--bg-elevated)] p-5 md:p-7">
+        {/* LIVE badge — mono, top-right */}
+        <span
+          aria-hidden
+          className="absolute z-10 font-mono"
+          style={{
+            top: "16px",
+            insetInlineEnd: "16px",
+            background: "rgba(255,255,255,0.06)",
+            color: "var(--fg-faint)",
+            padding: "3px 7px",
+            borderRadius: "3px",
+            fontSize: "9px",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+          }}
+        >
+          LIVE v2.04
+        </span>
+
+        {/* AFTER backdrop glow — the only place gold goes beyond surgical accents.
+            Positioned below+behind the AFTER frame. */}
       <div
         aria-hidden
         className="pointer-events-none absolute -z-10 hidden lg:block"
@@ -118,9 +141,16 @@ export function HeroVisual() {
         </div>
       </div>
 
-      {/* Noise overlay across the whole BEFORE-frame zone — applied via background-image */}
-      <style>{`.before-noise { background-image: ${noiseUrl}; }`}</style>
-    </div>
+        {/* Noise overlay across the whole BEFORE-frame zone — applied via background-image */}
+        <style>{`.before-noise { background-image: ${noiseUrl}; }`}</style>
+      </div>
+
+      <figcaption className="mt-4 text-center">
+        <Mono size={11} tone="faint">
+          FIG 0.1 — {isAr ? "تحول نَشْر" : "THE NASHR TRANSFORMATION"}
+        </Mono>
+      </figcaption>
+    </figure>
   );
 }
 
