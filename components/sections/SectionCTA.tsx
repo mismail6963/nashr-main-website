@@ -63,22 +63,28 @@ export function SectionCTA() {
                 {...ext}
                 className="group block relative h-full bg-[var(--bg-card)] border border-[var(--border)] hover:border-[var(--gold)]/40 hover:bg-[var(--bg-elevated)] transition-colors duration-200 p-8 md:p-10 min-h-[240px] flex flex-col justify-between overflow-hidden"
               >
-                {/* Hover preview slot — top-right corner */}
+                {/* Hover preview slot — pinned to logical end (top-right LTR / top-left RTL) */}
                 <div className="absolute top-6" style={{ insetInlineEnd: "24px" }}>
                   <TilePreview index={i} />
                 </div>
 
-                <Icon
-                  size={20}
-                  strokeWidth={1.5}
-                  style={{ color: "var(--gold-bright)" }}
-                  aria-hidden
-                />
-                <div className="mt-10">
+                {/* Icon row — flex defaults to flex-start which respects direction:
+                    icon sits at the left in LTR and at the right in RTL */}
+                <div className="flex">
+                  <Icon
+                    size={20}
+                    strokeWidth={1.5}
+                    style={{ color: "var(--gold-bright)" }}
+                    aria-hidden
+                  />
+                </div>
+
+                <div className="mt-10 text-start">
+                  {/* 'OPEN' / 'افتح' — Mono in EN, Arabic font in AR via .section-ref-label */}
                   <p>
-                    <Mono size={11} tone="faint">
+                    <span className="section-ref-label" style={{ color: "var(--fg-faint)" }}>
                       {tile.cta}
-                    </Mono>
+                    </span>
                   </p>
                   <h3 className="mt-2 t-body-lg font-medium text-[var(--fg)] group-hover:text-[var(--gold-bright)] transition-colors duration-200">
                     {tile.channel}
@@ -88,7 +94,7 @@ export function SectionCTA() {
                   </p>
                   <span
                     aria-hidden
-                    className="mt-4 inline-block text-[var(--fg-faint)] transition-transform duration-200 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
+                    className="mt-4 block w-fit ms-auto text-[var(--fg-faint)] transition-transform duration-200 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
                     style={{ fontFamily: "var(--font-mono), monospace", fontSize: "12px" }}
                   >
                     {isAr ? "←" : "→"}
