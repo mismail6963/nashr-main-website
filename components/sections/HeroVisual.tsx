@@ -376,11 +376,11 @@ function AfterContent({ isAr, reduce }: { isAr: boolean; reduce: boolean }) {
       <div className="relative mt-3.5 flex flex-col gap-1.5 items-start rtl:items-end">
         {/* CTA */}
         <span
-          className="rounded-full px-2 py-0.5"
+          className="rounded-full px-2 py-0.5 whitespace-nowrap"
           style={{
             background: "var(--gold)",
             color: "#08090A",
-            fontSize: isAr ? "8px" : "7px",
+            fontSize: isAr ? "9px" : "8px",
             fontWeight: 600,
             letterSpacing: isAr ? "0" : "0.06em",
             width: "fit-content",
@@ -425,43 +425,37 @@ function AfterContent({ isAr, reduce }: { isAr: boolean; reduce: boolean }) {
         />
       </div>
 
-      {/* Lower row — 2 cells: phone+chat / calendar+highlight */}
+      {/* Lower row — 2 icon-only cells (no text labels, locale-agnostic) */}
       <div className="absolute inset-x-3 bottom-3 grid grid-cols-2 gap-2">
         <div
-          className="flex items-center gap-2 rounded-[4px] border p-2"
+          className="flex items-center justify-center rounded-[4px] border p-2 min-h-[28px]"
           style={{
             borderColor: "var(--border)",
             background: "rgba(8,9,10,0.5)",
           }}
         >
-          <div className="relative">
-            <Smartphone size={14} strokeWidth={1.5} style={{ color: "var(--fg-secondary)" }} aria-hidden />
-            <MessageCircle
-              size={8}
-              strokeWidth={1.5}
-              className="absolute -right-1.5 -top-1"
-              style={{ color: "var(--gold-bright)" }}
-              aria-hidden
-            />
-          </div>
-          <Mono size={11} tone="faint">{t("featMobile")}</Mono>
+          <Smartphone
+            size={16}
+            strokeWidth={1.5}
+            style={{ color: "var(--fg-secondary)" }}
+            aria-hidden
+          />
         </div>
         <div
-          className="flex items-center gap-2 rounded-[4px] border p-2"
+          className="flex items-center justify-center rounded-[4px] border p-2 min-h-[28px]"
           style={{
             borderColor: "var(--border)",
             background: "rgba(8,9,10,0.5)",
           }}
         >
           <div className="relative">
-            <CalendarDays size={14} strokeWidth={1.5} style={{ color: "var(--fg-secondary)" }} aria-hidden />
+            <CalendarDays size={16} strokeWidth={1.5} style={{ color: "var(--fg-secondary)" }} aria-hidden />
             <span
               aria-hidden
               className="absolute -bottom-0.5 -right-0.5 block h-1.5 w-1.5 rounded-full"
               style={{ background: "var(--gold-bright)" }}
             />
           </div>
-          <Mono size={11} tone="faint">{t("featBooking")}</Mono>
         </div>
       </div>
 
