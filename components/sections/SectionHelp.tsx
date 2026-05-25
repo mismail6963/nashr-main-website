@@ -116,14 +116,6 @@ export function SectionHelp() {
           />
         </div>
       </div>
-
-      <Reveal delay={0.12}>
-        <p className="mt-10 text-center">
-          <Mono size={11} tone="faint">
-            {t("disclaimer")}
-          </Mono>
-        </p>
-      </Reveal>
     </SectionShell>
   );
 }
