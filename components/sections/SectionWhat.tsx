@@ -45,7 +45,7 @@ export function SectionWhat() {
           {stats.map((stat, i) => (
             <div key={i} className="bg-[var(--bg)] p-10 md:p-12 flex flex-col gap-4 min-h-[260px]">
               <span
-                className="ltr-mono inline-flex items-baseline"
+                className="ltr-mono inline-flex items-baseline tabular-nums"
                 style={{
                   fontFamily: "var(--font-sans), sans-serif",
                   fontWeight: 500,
