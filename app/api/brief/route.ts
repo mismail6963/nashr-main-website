@@ -17,7 +17,6 @@ const REQUIRED_FIELDS = [
   "phone",
   "hasWebsite",
   "needs",
-  "message",
 ] as const;
 const MAX_FIELD_LENGTH = 5000;
 
@@ -90,6 +89,7 @@ export async function POST(req: NextRequest) {
 
     const timestamp = new Date().toISOString();
     const link = (data.link as string)?.trim() || "—";
+    const message = (data.message as string)?.trim() || "—";
 
     // Plain-text version (for clients that don't render HTML)
     const text = [
@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
       `Current link:     ${link}`,
       "",
       "Message:",
-      data.message,
+      message,
       "",
       `Submitted: ${timestamp}`,
     ].join("\n");
@@ -127,7 +127,7 @@ export async function POST(req: NextRequest) {
     </table>
     <div style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);">
       <div style="font-weight:600;color:#cfc5b7;font-size:14px;margin-bottom:8px;">Message</div>
-      <div style="color:#cfc5b7;font-size:14px;line-height:1.6;white-space:pre-wrap;">${escapeHtml(data.message)}</div>
+      <div style="color:#cfc5b7;font-size:14px;line-height:1.6;white-space:pre-wrap;">${escapeHtml(message)}</div>
     </div>
     <div style="margin-top:24px;color:#8A8F98;font-size:12px;">Submitted: ${timestamp}</div>
   </div>
