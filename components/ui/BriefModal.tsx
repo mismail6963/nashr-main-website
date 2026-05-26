@@ -16,6 +16,7 @@ import {
   type FormEvent,
   type ReactNode,
 } from "react";
+import { createPortal } from "react-dom";
 import { useLocale, useTranslations } from "next-intl";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { X, Check, MessageCircle } from "lucide-react";
@@ -46,6 +47,13 @@ export function BriefModal({ isOpen, onClose }: Props) {
   const isAr = locale === "ar";
   const reduce = useReducedMotion();
   const titleId = useId();
+
+  // SSR safety: document.body doesn't exist during server rendering, so
+  // gate the portal on a mounted flag. Prevents hydration warnings.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const panelRef = useRef<HTMLDivElement>(null);
   const lastFocusedRef = useRef<HTMLElement | null>(null);
@@ -180,7 +188,9 @@ export function BriefModal({ isOpen, onClose }: Props) {
 
   const needsOptions = (t.raw("fields.needsOptions") as string[]) ?? [];
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <motion.div
@@ -245,7 +255,8 @@ export function BriefModal({ isOpen, onClose }: Props) {
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }
 
