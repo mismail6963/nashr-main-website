@@ -8,22 +8,13 @@ const whatsappMessage =
 export const CONTACT = {
   calcom: "https://cal.com/nashr/free-mockup-walkthrough-call",
   whatsapp: `https://wa.me/966555987440?text=${encodeURIComponent(whatsappMessage)}`,
-  // TODO: replace with NASHR's real email
-  email:
-    "mailto:hello@nashr.sa?subject=" +
-    encodeURIComponent("Website enquiry"),
-  emailAr:
-    "mailto:hello@nashr.sa?subject=" +
-    encodeURIComponent("استفسار عن موقع"),
 } as const;
 
-export function getContactLinks(locale: string) {
-  const isAr = locale === "ar";
+export function getContactLinks(_locale: string) {
   return {
     calcom: CONTACT.calcom,
     // WhatsApp URL is identical in both locales (bilingual pre-filled text).
     whatsapp: CONTACT.whatsapp,
-    email: isAr ? CONTACT.emailAr : CONTACT.email,
   };
 }
 
