@@ -4,7 +4,7 @@
 //
 // FIG 0.1 single-window redesign:
 // - One browser window, full width of the figure container (no BEFORE/AFTER split)
-// - Live chrome (3 colored traffic lights, nashr.sa URL pill, LIVE indicator)
+// - Live chrome (3 colored traffic lights, nashr.net URL pill, LIVE indicator)
 // - Interior: top nav stub (NASHR + nav rects + EN|AR pill), gold CTA pill,
 //   headline stub with a sweeping highlight on a 4s loop, 2 body stubs,
 //   3 icon-only feature cells (Smartphone / MessageCircle / CalendarDays),
@@ -134,6 +134,7 @@ export function HeroVisual() {
         <figcaption className="mt-4 text-center">
           <span
             dir="ltr"
+            lang="en"
             className="font-mono t-mono-sm uppercase text-[var(--fg-faint)]"
             style={{ fontFamily: "var(--font-mono), monospace" }}
           >
@@ -198,7 +199,7 @@ function BrowserChrome() {
             color: "var(--fg-secondary)",
           }}
         >
-          nashr.sa
+          nashr.net
         </span>
         <span
           className="inline-flex items-center gap-1 font-mono"

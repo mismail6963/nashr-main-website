@@ -12,7 +12,7 @@ export function Footer() {
     <footer className="relative mt-0 border-t border-[var(--border)]">
       <div className="container-page flex h-20 flex-col gap-6 py-6 md:flex-row md:items-center md:justify-between md:py-0">
         {/* Left: wordmark + copyright */}
-        <div className="flex items-center gap-3" dir="ltr">
+        <div className="flex items-center gap-3" dir="ltr" lang="en">
           <span aria-hidden className="h-1 w-1 rounded-full bg-[var(--gold)]" />
           <span className="text-[15px] font-semibold tracking-[-0.03em]">
             NASHR

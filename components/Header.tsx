@@ -62,6 +62,7 @@ export function Header() {
             className="flex items-center gap-2 focus-visible:outline-none"
             aria-label="NASHR — home"
             dir="ltr"
+            lang="en"
           >
             <span
               aria-hidden
@@ -130,7 +131,7 @@ export function Header() {
             aria-label="Mobile navigation"
           >
             <div className="container-page flex h-16 items-center justify-between">
-              <div className="flex items-center gap-2" dir="ltr">
+              <div className="flex items-center gap-2" dir="ltr" lang="en">
                 <span
                   aria-hidden
                   className="h-1 w-1 rounded-full bg-[var(--gold)]"
