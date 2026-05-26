@@ -125,7 +125,7 @@
     "headlineAria": "Three ways in. No forms.",
     "sub": "Pick the channel you already use. We answer fast in both Arabic and English.",
     "tiles": [
-      { "channel": "Book a call", "body": "A 20-minute free consultation. We look at your business and tell you honestly what would help.", "cta": "OPEN" },
+      { "channel": "Book a call", "body": "A 15-minute free consultation. We look at your business and tell you honestly what would help.", "cta": "OPEN" },
       { "channel": "WhatsApp us", "body": "The fastest way. Send us a message, we usually reply within an hour during business hours.", "cta": "OPEN" },
       { "channel": "Email", "body": "If you'd rather write. We reply within one business day, always.", "cta": "OPEN" }
     ]
