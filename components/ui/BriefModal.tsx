@@ -267,7 +267,7 @@ export function BriefModal({ isOpen, onClose }: Props) {
               type="button"
               onClick={onClose}
               aria-label={t("close")}
-              className="absolute top-4 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors"
+              className="absolute top-4 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors [touch-action:manipulation]"
               style={{ insetInlineEnd: "16px" }}
             >
               <X size={20} strokeWidth={1.75} aria-hidden />
@@ -340,7 +340,7 @@ function SuccessState({
       <button
         type="button"
         onClick={onClose}
-        className="mt-8 inline-flex h-11 items-center justify-center rounded-full bg-[var(--gold)] px-6 text-[14px] font-medium text-[#08090A] hover:bg-[var(--gold-bright)] transition-colors"
+        className="mt-8 inline-flex h-11 items-center justify-center rounded-full bg-[var(--gold)] px-6 text-[14px] font-medium text-[#08090A] hover:bg-[var(--gold-bright)] transition-colors [touch-action:manipulation]"
       >
         {t("close")}
       </button>
@@ -507,7 +507,7 @@ function BriefForm({
           <button
             type="submit"
             disabled={status === "sending"}
-            className="inline-flex h-11 items-center justify-center rounded-full bg-[var(--gold)] px-6 text-[14px] font-medium text-[#08090A] hover:bg-[var(--gold-bright)] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            className="inline-flex h-11 items-center justify-center rounded-full bg-[var(--gold)] px-6 text-[14px] font-medium text-[#08090A] hover:bg-[var(--gold-bright)] transition-colors disabled:opacity-60 disabled:cursor-not-allowed [touch-action:manipulation]"
           >
             {status === "sending" ? t("sending") : t("submit")}
           </button>
@@ -593,7 +593,7 @@ function Field({
         aria-describedby={error ? `${id}-err` : undefined}
         onInput={() => onClearError?.(name)}
         className={cn(
-          "block w-full rounded-md bg-[var(--bg-elevated)] px-4 py-3 text-[15px] text-[var(--fg)] placeholder:text-[var(--fg-faint)] outline-none transition-colors",
+          "block w-full rounded-md bg-[var(--bg-elevated)] px-4 py-3 text-[15px] text-[var(--fg)] placeholder:text-[var(--fg-faint)] outline-none transition-colors [touch-action:manipulation]",
           "border",
           error
             ? "border-[#fca5a5]/60"
@@ -632,7 +632,7 @@ function TextareaField({
         name={name}
         rows={rows}
         placeholder={placeholder}
-        className="block w-full resize-y rounded-md border border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-3 text-[15px] text-[var(--fg)] placeholder:text-[var(--fg-faint)] outline-none transition-colors focus:border-[var(--gold-bright)]"
+        className="block w-full resize-y rounded-md border border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-3 text-[15px] text-[var(--fg)] placeholder:text-[var(--fg-faint)] outline-none transition-colors focus:border-[var(--gold-bright)] [touch-action:manipulation]"
       />
     </div>
   );
@@ -663,7 +663,7 @@ function PillGroup({
         {options.map((opt, i) => (
           <label
             key={i}
-            className="cursor-pointer rounded-full border border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-2 text-[14px] text-[var(--fg-secondary)] transition-colors hover:border-[var(--gold)]/40 has-[:checked]:border-[var(--gold-bright)] has-[:checked]:bg-[rgba(199,178,122,0.10)] has-[:checked]:text-[var(--gold-bright)]"
+            className="cursor-pointer rounded-full border border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-2 text-[14px] text-[var(--fg-secondary)] transition-colors hover:border-[var(--gold)]/40 has-[:checked]:border-[var(--gold-bright)] has-[:checked]:bg-[rgba(199,178,122,0.10)] has-[:checked]:text-[var(--gold-bright)] [touch-action:manipulation]"
           >
             <input
               type="radio"
