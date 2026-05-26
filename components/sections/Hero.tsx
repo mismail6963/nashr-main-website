@@ -31,6 +31,13 @@ export function Hero() {
   const { calcom } = getContactLinks(locale);
   const reduce = useReducedMotion();
 
+  // EN's tight Inter Tight headline lands "businesses" lower than AR's
+  // IBM Plex Sans Arabic equivalent, so EN needs a larger top offset on
+  // the figure wrapper to clear the headline. AR stays at its current
+  // (correct) value. Centered grid items absorb ~half of margin-top via
+  // items-center, hence the deliberately large 288px value for EN.
+  const figureTopOffset = isAr ? "lg:mt-40" : "lg:mt-72";
+
   // Word array: [{text, accent?}]. Built from message JSON.
   const headlineWords = (t.raw("headlineWords") as Array<
     string | { text: string; accent?: boolean }
@@ -115,7 +122,7 @@ export function Hero() {
 
         {/* Right: BEFORE/AFTER visual — 400ms */}
         <motion.div
-          className={`col-span-12 lg:col-span-5 ${isAr ? "lg:mt-40" : "lg:mt-44"}`}
+          className={`col-span-12 lg:col-span-5 ${figureTopOffset}`}
           initial={reduce ? false : { opacity: 0, scale: 0.98 }}
           animate={reduce ? undefined : { opacity: 1, scale: 1 }}
           transition={{ duration: 0.72, delay: 0.4, ease: EASE_OUT_QUINT }}
