@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -139,6 +141,11 @@ export default async function LocaleLayout({
 Cal("init", "free-mockup-walkthrough-call", {origin:"https://app.cal.com"});
 Cal.ns["free-mockup-walkthrough-call"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});`}
         </Script>
+        {/* Vercel Web Analytics + Speed Insights — autoconfigured on Vercel
+            deployments, no env vars needed. Placed after children + Cal
+            script so they don't interfere with anything above. */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
