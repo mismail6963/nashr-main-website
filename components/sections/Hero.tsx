@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/Button";
 import { Mono } from "@/components/ui/Mono";
 import { HeroVisual } from "@/components/sections/HeroVisual";
-import { getContactLinks } from "@/lib/contact";
+import { getContactLinks, CAL } from "@/lib/contact";
 import { SplitText } from "@/components/motion/SplitText";
 import { AmbientMesh } from "@/components/ui/AmbientMesh";
 import { EASE_OUT_QUINT } from "@/lib/motion";
@@ -103,7 +103,14 @@ export function Hero() {
             {...fade(0.75, 0.24)}
             className="mb-10 flex flex-wrap items-center gap-3"
           >
-            <Button variant="primary" href={calcom} external>
+            <Button
+              variant="primary"
+              href={calcom}
+              external
+              calLink={CAL.link}
+              calNamespace={CAL.namespace}
+              calConfig={CAL.config}
+            >
               {t("ctaPrimary")}
             </Button>
             <Button variant="secondary" href="#how">

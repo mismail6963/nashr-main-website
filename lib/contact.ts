@@ -1,6 +1,5 @@
 export const CONTACT = {
-  // TODO: replace with NASHR's real Cal.com URL
-  calcom: "https://cal.com/nashr/intro",
+  calcom: "https://cal.com/nashr/free-mockup-walkthrough-call",
   // TODO: replace with NASHR's real WhatsApp number
   whatsapp:
     "https://wa.me/9665XXXXXXXX?text=" +
@@ -25,3 +24,19 @@ export function getContactLinks(locale: string) {
     email: isAr ? CONTACT.emailAr : CONTACT.email,
   };
 }
+
+/**
+ * Cal.com popup trigger attributes. Spread onto any element to make it
+ * open the booking popup on click. The Cal.com embed.js (initialised
+ * globally in app/[locale]/layout.tsx) binds the click handler and
+ * calls preventDefault itself, so anchors keep working as fallbacks
+ * if the script fails to load.
+ */
+export const CAL = {
+  link: "nashr/free-mockup-walkthrough-call",
+  namespace: "free-mockup-walkthrough-call",
+  config: JSON.stringify({
+    layout: "month_view",
+    useSlotsViewOnSmallScreen: "true",
+  }),
+} as const;

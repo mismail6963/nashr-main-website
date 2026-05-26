@@ -12,7 +12,7 @@ import { SectionShell } from "@/components/ui/SectionShell";
 import { Mono } from "@/components/ui/Mono";
 import { Reveal } from "@/components/motion/Reveal";
 import { SplitText } from "@/components/motion/SplitText";
-import { getContactLinks } from "@/lib/contact";
+import { getContactLinks, CAL } from "@/lib/contact";
 
 type Tile = { channel: string; body: string; cta: string };
 
@@ -56,11 +56,22 @@ export function SectionCTA() {
           const ext = external[i]
             ? { target: "_blank", rel: "noopener noreferrer" }
             : {};
+          // Only the first tile (Book a call) opens the Cal.com popup.
+          // The href stays as a JS-disabled fallback to the booking page.
+          const calAttrs =
+            i === 0
+              ? {
+                  "data-cal-link": CAL.link,
+                  "data-cal-namespace": CAL.namespace,
+                  "data-cal-config": CAL.config,
+                }
+              : {};
           return (
             <Reveal key={i} delay={0.05 + i * 0.05}>
               <a
                 href={hrefs[i]}
                 {...ext}
+                {...calAttrs}
                 className="group block relative h-full bg-[var(--bg-card)] border border-[var(--border)] hover:border-[var(--gold)]/40 hover:bg-[var(--bg-elevated)] transition-colors duration-200 p-8 md:p-10 min-h-[240px] flex flex-col overflow-hidden"
               >
                 {/* Icon — absolute at logical START corner (top-left LTR / top-right RTL) */}

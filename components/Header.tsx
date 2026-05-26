@@ -7,7 +7,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { LangToggle } from "@/components/ui/LangToggle";
 import { Mono } from "@/components/ui/Mono";
-import { getContactLinks } from "@/lib/contact";
+import { getContactLinks, CAL } from "@/lib/contact";
 
 const NAV_LINKS = [
   { key: "work", href: "#how" },
@@ -92,7 +92,14 @@ export function Header() {
           <div className="flex items-center gap-3">
             <div className="hidden md:flex items-center gap-3">
               <LangToggle />
-              <Button variant="primary" href={calcom} external>
+              <Button
+                variant="primary"
+                href={calcom}
+                external
+                calLink={CAL.link}
+                calNamespace={CAL.namespace}
+                calConfig={CAL.config}
+              >
                 {t("cta")}
               </Button>
             </div>
@@ -157,7 +164,15 @@ export function Header() {
               ))}
               <div className="mt-6 flex items-center gap-4 pt-8 border-t border-[var(--border)]">
                 <LangToggle />
-                <Button variant="primary" href={calcom} external>
+                <Button
+                  variant="primary"
+                  href={calcom}
+                  external
+                  calLink={CAL.link}
+                  calNamespace={CAL.namespace}
+                  calConfig={CAL.config}
+                  onClick={() => setOpen(false)}
+                >
                   {t("cta")}
                 </Button>
               </div>

@@ -9,6 +9,12 @@ type Props = {
   external?: boolean;
   children: ReactNode;
   className?: string;
+  /** Cal.com popup trigger. When set, Cal.com's embed.js binds a click
+   *  handler that opens the booking popup; the anchor's href still
+   *  acts as a JS-disabled fallback. */
+  calLink?: string;
+  calNamespace?: string;
+  calConfig?: string;
 } & Omit<ComponentPropsWithoutRef<"button">, "className">;
 
 /**
@@ -25,6 +31,10 @@ export function Button({
   children,
   className,
   type = "button",
+  calLink,
+  calNamespace,
+  calConfig,
+  onClick,
   ...rest
 }: Props) {
   const base =
@@ -60,17 +70,38 @@ export function Button({
       children
     );
 
+  // Cal.com data attrs — applied to whichever element renders.
+  const calAttrs = calLink
+    ? {
+        "data-cal-link": calLink,
+        ...(calNamespace ? { "data-cal-namespace": calNamespace } : {}),
+        ...(calConfig ? { "data-cal-config": calConfig } : {}),
+      }
+    : {};
+
   if (href) {
     const extProps = external ? { target: "_blank", rel: "noopener noreferrer" } : {};
     return (
-      <a href={href} {...extProps} className={cn(base, variants[variant], className)}>
+      <a
+        href={href}
+        {...extProps}
+        {...calAttrs}
+        onClick={onClick as React.MouseEventHandler<HTMLAnchorElement> | undefined}
+        className={cn(base, variants[variant], className)}
+      >
         {content}
       </a>
     );
   }
 
   return (
-    <button type={type} {...rest} className={cn(base, variants[variant], className)}>
+    <button
+      type={type}
+      {...rest}
+      {...calAttrs}
+      onClick={onClick}
+      className={cn(base, variants[variant], className)}
+    >
       {content}
     </button>
   );
