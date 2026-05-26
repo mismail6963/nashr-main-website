@@ -10,6 +10,7 @@ import { fontSans, fontMono, fontArabic } from "@/lib/fonts";
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { GrainOverlay } from "@/components/ui/GrainOverlay";
+import { StructuredData } from "@/components/seo/StructuredData";
 import "../globals.css";
 
 const SITE_URL = "https://nashr.net";
@@ -89,29 +90,6 @@ export async function generateMetadata({
   };
 }
 
-// Placeholder JSON-LD — full ProfessionalService + WebSite schemas land
-// in a dedicated <StructuredData> component in a follow-up commit.
-const ORG_JSONLD = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "NASHR",
-  alternateName: "نَشر",
-  url: SITE_URL,
-  description: "Bilingual web design studio in Riyadh, Saudi Arabia.",
-  areaServed: { "@type": "Country", name: "Saudi Arabia" },
-  address: { "@type": "PostalAddress", addressLocality: "Riyadh", addressCountry: "SA" },
-  contactPoint: [
-    {
-      "@type": "ContactPoint",
-      contactType: "sales",
-      areaServed: "SA",
-      availableLanguage: ["Arabic", "English"],
-      email: "mohammed@nashr.net",
-      telephone: "+966555987440",
-    },
-  ],
-};
-
 export default async function LocaleLayout({
   children,
   params,
@@ -136,13 +114,8 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} dir={dir} className={fontClass}>
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_JSONLD) }}
-        />
-      </head>
       <body>
+        <StructuredData locale={locale} />
         <a href="#main" className="skip-link">
           Skip to content
         </a>
