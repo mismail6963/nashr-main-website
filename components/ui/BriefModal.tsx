@@ -76,6 +76,22 @@ export function BriefModal({ isOpen, onClose }: Props) {
     }
   }, [isOpen]);
 
+  // Stop Lenis smooth-scroll while the modal is open. On touch devices
+  // Lenis isn't instantiated in the first place (SmoothScroll guards on
+  // `(hover: none) and (pointer: coarse)`) so this is a no-op there —
+  // but defensive on hybrid devices and pointer-capable tablets.
+  useEffect(() => {
+    const lenis = (
+      window as unknown as { __lenis?: { stop: () => void; start: () => void } }
+    ).__lenis;
+    if (!lenis) return;
+    if (isOpen) lenis.stop();
+    else lenis.start();
+    return () => {
+      lenis.start();
+    };
+  }, [isOpen]);
+
   // Body scroll lock + ESC close + focus management
   useEffect(() => {
     if (!isOpen) return;
