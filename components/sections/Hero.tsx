@@ -115,7 +115,7 @@ export function Hero() {
 
         {/* Right: BEFORE/AFTER visual — 400ms */}
         <motion.div
-          className="col-span-12 lg:col-span-5 lg:mt-40"
+          className={`col-span-12 lg:col-span-5 ${isAr ? "lg:mt-40" : "lg:mt-44"}`}
           initial={reduce ? false : { opacity: 0, scale: 0.98 }}
           animate={reduce ? undefined : { opacity: 1, scale: 1 }}
           transition={{ duration: 0.72, delay: 0.4, ease: EASE_OUT_QUINT }}
