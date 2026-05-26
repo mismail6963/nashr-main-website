@@ -118,11 +118,9 @@
     "headlineWords": [
       "Three",
       "ways",
-      "in.",
-      { "text": "No", "accent": true },
-      { "text": "forms.", "accent": true }
+      "in."
     ],
-    "headlineAria": "Three ways in. No forms.",
+    "headlineAria": "Three ways in.",
     "sub": "Pick the channel you already use. We answer fast in both Arabic and English.",
     "tiles": [
       { "channel": "Book a call", "body": "A 15-minute free consultation. We look at your business and tell you honestly what would help.", "cta": "OPEN" },
