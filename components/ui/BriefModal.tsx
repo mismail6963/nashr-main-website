@@ -92,12 +92,26 @@ export function BriefModal({ isOpen, onClose }: Props) {
     };
   }, [isOpen]);
 
-  // Body scroll lock + ESC close + focus management
+  // Body scroll lock + ESC close + focus management.
+  //
+  // iOS Safari ignores `overflow: hidden` on <body>. The reliable
+  // cross-browser lock is position:fixed + top:-scrollY, which actually
+  // freezes the page AND keeps touch events firing inside the modal.
+  // The naive overflow-hidden approach is the most common cause of
+  // "modal opens but inputs don't accept taps" on iOS.
   useEffect(() => {
     if (!isOpen) return;
 
     lastFocusedRef.current = document.activeElement as HTMLElement | null;
-    document.body.style.overflow = "hidden";
+
+    const scrollY = window.scrollY;
+    const body = document.body;
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.width = "100%";
+    body.style.overflowY = "scroll"; // preserves scrollbar gutter on desktop
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -136,7 +150,14 @@ export function BriefModal({ isOpen, onClose }: Props) {
     return () => {
       document.removeEventListener("keydown", onKey);
       cancelAnimationFrame(focusFrame);
-      document.body.style.overflow = "";
+      // Restore scroll lock styles and the prior scroll position
+      body.style.position = "";
+      body.style.top = "";
+      body.style.left = "";
+      body.style.right = "";
+      body.style.width = "";
+      body.style.overflowY = "";
+      window.scrollTo(0, scrollY);
       // Return focus to the originating trigger
       lastFocusedRef.current?.focus?.();
     };
