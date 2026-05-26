@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/Button";
 import { Mono } from "@/components/ui/Mono";
 import { HeroVisual } from "@/components/sections/HeroVisual";
-import { getContactLinks } from "@/lib/contact";
+import { getContactLinks, CAL } from "@/lib/contact";
 import { SplitText } from "@/components/motion/SplitText";
 import { AmbientMesh } from "@/components/ui/AmbientMesh";
 import { EASE_OUT_QUINT } from "@/lib/motion";
@@ -30,6 +30,13 @@ export function Hero() {
   const isAr = locale === "ar";
   const { calcom } = getContactLinks(locale);
   const reduce = useReducedMotion();
+
+  // EN's tight Inter Tight headline lands "businesses" lower than AR's
+  // IBM Plex Sans Arabic equivalent, so EN needs a larger top offset on
+  // the figure wrapper to clear the headline. AR stays at its current
+  // (correct) value. Centered grid items absorb ~half of margin-top via
+  // items-center, hence the deliberately large 288px value for EN.
+  const figureTopOffset = isAr ? "lg:mt-40" : "lg:mt-72";
 
   // Word array: [{text, accent?}]. Built from message JSON.
   const headlineWords = (t.raw("headlineWords") as Array<
@@ -96,7 +103,14 @@ export function Hero() {
             {...fade(0.75, 0.24)}
             className="mb-10 flex flex-wrap items-center gap-3"
           >
-            <Button variant="primary" href={calcom} external>
+            <Button
+              variant="primary"
+              href={calcom}
+              external
+              calLink={CAL.link}
+              calNamespace={CAL.namespace}
+              calConfig={CAL.config}
+            >
               {t("ctaPrimary")}
             </Button>
             <Button variant="secondary" href="#how">
@@ -115,7 +129,7 @@ export function Hero() {
 
         {/* Right: BEFORE/AFTER visual — 400ms */}
         <motion.div
-          className="col-span-12 lg:col-span-5 lg:mt-40"
+          className={`col-span-12 lg:col-span-5 ${figureTopOffset}`}
           initial={reduce ? false : { opacity: 0, scale: 0.98 }}
           animate={reduce ? undefined : { opacity: 1, scale: 1 }}
           transition={{ duration: 0.72, delay: 0.4, ease: EASE_OUT_QUINT }}

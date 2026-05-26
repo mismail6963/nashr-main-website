@@ -1,22 +1,28 @@
 "use client";
 
+import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "motion/react";
 import {
   CalendarClock,
   MessageCircle,
-  Mail,
+  FileText,
   type LucideIcon,
 } from "lucide-react";
 import { SectionShell } from "@/components/ui/SectionShell";
-import { Mono } from "@/components/ui/Mono";
 import { Reveal } from "@/components/motion/Reveal";
 import { SplitText } from "@/components/motion/SplitText";
-import { getContactLinks } from "@/lib/contact";
+import { BriefModal } from "@/components/ui/BriefModal";
+import { getContactLinks, CAL } from "@/lib/contact";
 
 type Tile = { channel: string; body: string; cta: string };
 
-const ICONS: LucideIcon[] = [CalendarClock, MessageCircle, Mail];
+const ICONS: LucideIcon[] = [CalendarClock, MessageCircle, FileText];
+
+// Shared card visual — identical Tailwind across all three tiles so swapping
+// the third tile's tag from <a> to <button> doesn't shift the layout.
+const CARD_CLASS =
+  "group block relative h-full bg-[var(--bg-card)] border border-[var(--border)] hover:border-[var(--gold)]/40 hover:bg-[var(--bg-elevated)] transition-colors duration-200 p-8 md:p-10 min-h-[240px] flex flex-col overflow-hidden text-start";
 
 export function SectionCTA() {
   const t = useTranslations("contact");
@@ -29,8 +35,8 @@ export function SectionCTA() {
     string | { text: string; accent?: boolean }
   >) ?? [];
 
-  const hrefs = [links.calcom, links.whatsapp, links.email];
-  const external = [true, true, false];
+  const hrefs = [links.calcom, links.whatsapp];
+  const [briefOpen, setBriefOpen] = useState(false);
 
   return (
     <SectionShell id="contact" number="4.0" label={t("ref")} watermark="04">
@@ -52,62 +58,132 @@ export function SectionCTA() {
 
       <div className="mt-16 md:mt-20 grid grid-cols-1 md:grid-cols-3 gap-6">
         {tiles.map((tile, i) => {
-          const Icon = ICONS[i] ?? Mail;
-          const ext = external[i]
-            ? { target: "_blank", rel: "noopener noreferrer" }
-            : {};
+          const Icon = ICONS[i] ?? FileText;
+          const cardInner = (
+            <CardContent
+              tile={tile}
+              Icon={Icon}
+              previewIndex={i}
+              arrowChar={isAr ? "←" : "→"}
+            />
+          );
+
+          // Tile 3 (Start a brief) — button that opens the BriefModal.
+          if (i === 2) {
+            return (
+              <Reveal key={i} delay={0.05 + i * 0.05}>
+                <button
+                  type="button"
+                  onClick={() => setBriefOpen(true)}
+                  aria-label={t("startBrief.aria")}
+                  className={CARD_CLASS}
+                >
+                  {cardInner}
+                </button>
+              </Reveal>
+            );
+          }
+
+          // Tiles 1 + 2 — anchors (Cal.com popup / WhatsApp).
+          const ext =
+            i === 0 || i === 1
+              ? { target: "_blank", rel: "noopener noreferrer" }
+              : {};
+          const calAttrs =
+            i === 0
+              ? {
+                  "data-cal-link": CAL.link,
+                  "data-cal-namespace": CAL.namespace,
+                  "data-cal-config": CAL.config,
+                }
+              : {};
+          const ariaLabel =
+            i === 1 ? "Open WhatsApp chat with NASHR" : undefined;
           return (
             <Reveal key={i} delay={0.05 + i * 0.05}>
               <a
                 href={hrefs[i]}
                 {...ext}
-                className="group block relative h-full bg-[var(--bg-card)] border border-[var(--border)] hover:border-[var(--gold)]/40 hover:bg-[var(--bg-elevated)] transition-colors duration-200 p-8 md:p-10 min-h-[240px] flex flex-col justify-between overflow-hidden"
+                {...calAttrs}
+                aria-label={ariaLabel}
+                className={CARD_CLASS}
               >
-                {/* Hover preview slot — top-right corner */}
-                <div className="absolute top-6" style={{ insetInlineEnd: "24px" }}>
-                  <TilePreview index={i} />
-                </div>
-
-                <Icon
-                  size={20}
-                  strokeWidth={1.5}
-                  style={{ color: "var(--gold-bright)" }}
-                  aria-hidden
-                />
-                <div className="mt-10">
-                  <p>
-                    <Mono size={11} tone="faint">
-                      {tile.cta}
-                    </Mono>
-                  </p>
-                  <h3 className="mt-2 t-body-lg font-medium text-[var(--fg)] group-hover:text-[var(--gold-bright)] transition-colors duration-200">
-                    {tile.channel}
-                  </h3>
-                  <p className="mt-2 t-body text-[var(--fg-secondary)]">
-                    {tile.body}
-                  </p>
-                  <span
-                    aria-hidden
-                    className="mt-4 inline-block text-[var(--fg-faint)] transition-transform duration-200 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
-                    style={{ fontFamily: "var(--font-mono), monospace", fontSize: "12px" }}
-                  >
-                    {isAr ? "←" : "→"}
-                  </span>
-                </div>
+                {cardInner}
               </a>
             </Reveal>
           );
         })}
       </div>
 
-      <Reveal delay={0.18}>
-        <p className="mt-14 text-center">
-          <Mono size={11} tone="faint">
-            {t("meta")}
-          </Mono>
-        </p>
-      </Reveal>
+      <BriefModal isOpen={briefOpen} onClose={() => setBriefOpen(false)} />
     </SectionShell>
+  );
+}
+
+/* ---------- Shared card content ---------- */
+
+function CardContent({
+  tile,
+  Icon,
+  previewIndex,
+  arrowChar,
+}: {
+  tile: Tile;
+  Icon: LucideIcon;
+  previewIndex: number;
+  arrowChar: string;
+}) {
+  return (
+    <>
+      {/* Icon — absolute at logical START corner */}
+      <div
+        className="absolute"
+        style={{ top: "32px", insetInlineStart: "32px" }}
+      >
+        <Icon
+          size={20}
+          strokeWidth={1.5}
+          style={{ color: "var(--gold-bright)" }}
+          aria-hidden
+        />
+      </div>
+
+      {/* Hover preview — logical END corner */}
+      <div
+        className="absolute"
+        style={{ top: "24px", insetInlineEnd: "24px" }}
+      >
+        <TilePreview index={previewIndex} />
+      </div>
+
+      {/* Body — text-start auto-aligns right in RTL */}
+      <div className="mt-16 text-start">
+        <h3 className="t-body-lg font-medium text-[var(--fg)] group-hover:text-[var(--gold-bright)] transition-colors duration-200">
+          {tile.channel}
+        </h3>
+        <p className="mt-2 t-body text-[var(--fg-secondary)]">{tile.body}</p>
+      </div>
+
+      {/* Bottom row — OPEN + arrow at logical END */}
+      <div className="mt-auto ms-auto pt-6 flex items-center gap-2">
+        <span
+          className="section-ref-label"
+          style={{ color: "var(--fg-faint)" }}
+        >
+          {tile.cta}
+        </span>
+        <span
+          aria-hidden
+          className="text-[var(--fg-faint)] transition-transform duration-200 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
+          style={{
+            fontFamily: "var(--font-mono), monospace",
+            fontSize: "13px",
+          }}
+        >
+          {arrowChar}
+        </span>
+      </div>
+    </>
   );
 }
 
@@ -115,14 +191,18 @@ export function SectionCTA() {
 
 function TilePreview({ index }: { index: number }) {
   switch (index) {
-    case 0: return <PreviewCalendar />;
-    case 1: return <PreviewChat />;
-    case 2: return <PreviewEnvelope />;
-    default: return null;
+    case 0:
+      return <PreviewCalendar />;
+    case 1:
+      return <PreviewChat />;
+    case 2:
+      return <PreviewBriefForm />;
+    default:
+      return null;
   }
 }
 
-/* Calendar tile — 5-bar audio meter equalizes on hover (call connecting feel) */
+/* Calendar tile — 5-bar audio meter equalizes on hover */
 function PreviewCalendar() {
   return (
     <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end gap-[3px] h-6">
@@ -168,45 +248,52 @@ function PreviewChat() {
   );
 }
 
-/* Email tile — envelope opens with paper edge sliding up */
-function PreviewEnvelope() {
+/* Brief-form tile — small document fills its lines in, then a checkmark */
+function PreviewBriefForm() {
   return (
     <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 relative">
-      <svg viewBox="0 0 32 24" width="32" height="24" aria-hidden>
-        {/* Envelope body */}
+      <svg viewBox="0 0 32 28" width="32" height="28" aria-hidden>
+        {/* Document outline */}
         <rect
-          x="2"
-          y="6"
-          width="28"
-          height="16"
+          x="3"
+          y="2"
+          width="22"
+          height="24"
           rx="2"
           fill="none"
           stroke="var(--gold-bright)"
           strokeWidth="1.25"
         />
-        {/* Open flap */}
+        {/* Form lines — stagger in to suggest fields being filled */}
+        {[8, 13, 18].map((y, i) => (
+          <motion.line
+            key={i}
+            x1="6"
+            x2="22"
+            y1={y}
+            y2={y}
+            stroke="var(--gold-bright)"
+            strokeWidth="1"
+            initial={{ pathLength: 0, opacity: 0.4 }}
+            animate={{ pathLength: 1, opacity: 1 }}
+            transition={{
+              duration: 0.5,
+              delay: i * 0.12,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          />
+        ))}
+        {/* Check tick at the bottom corner */}
         <motion.path
-          d="M 2 6 L 16 16 L 30 6"
+          d="M 18 22 L 21 25 L 26 19"
           fill="none"
           stroke="var(--gold-bright)"
-          strokeWidth="1.25"
-          initial={{ pathLength: 0, opacity: 0.5 }}
-          animate={{ pathLength: 1, opacity: 1 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        />
-        {/* Paper sliding up */}
-        <motion.rect
-          x="6"
-          y="14"
-          width="20"
-          height="10"
-          rx="1"
-          fill="var(--bg-card)"
-          stroke="var(--fg-muted)"
-          strokeWidth="0.75"
-          initial={{ y: 14 }}
-          animate={{ y: 2 }}
-          transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{ duration: 0.5, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
         />
       </svg>
     </div>

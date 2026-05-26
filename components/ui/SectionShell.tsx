@@ -55,13 +55,6 @@ export function SectionShell({
         className,
       )}
     >
-      {/* Watermark — sits in the section background */}
-      {watermark && (
-        <span aria-hidden className="section-watermark">
-          {watermark}
-        </span>
-      )}
-
       <div className="container-page section-pad relative">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 md:gap-12">
           {/* Left: sticky section ref */}

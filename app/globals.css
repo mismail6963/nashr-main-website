@@ -149,13 +149,13 @@ html[lang="ar"] .t-h2 {
   font-weight: 500;
 }
 html[lang="ar"] .t-body-lg {
-  font-size: clamp(17px, 1.2vw, 20px);
-  line-height: 1.7;
+  font-size: clamp(19px, 1.4vw, 22px);
+  line-height: 1.65;
   letter-spacing: 0;
 }
 html[lang="ar"] .t-body {
-  font-size: 16px;
-  line-height: 1.8;
+  font-size: 18px;
+  line-height: 1.7;
   letter-spacing: 0;
 }
 
@@ -177,14 +177,61 @@ html[lang="ar"] .t-body {
   letter-spacing: 0.08em;
 }
 
-/* Force LTR + Latin font on mono labels inside Arabic prose */
+/* Force LTR + Latin font on mono labels inside Arabic prose.
+   The font cascade now includes the Arabic family so any non-Latin
+   codepoints inside a mono label fall through cleanly to IBM Plex
+   Sans Arabic instead of a generic system fallback. */
 [dir="rtl"] .ltr-mono,
 html[lang="ar"] .ltr-mono {
   direction: ltr;
   unicode-bidi: isolate;
-  font-family: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
+  font-family: var(--font-mono), var(--font-arabic), "IBM Plex Sans Arabic", "JetBrains Mono", ui-monospace, monospace;
   letter-spacing: 0.04em;
 }
+
+/* Arabic mini-font bumps — Arabic glyphs render visually smaller than
+   Latin at equal px size, so the small UI tier (mono labels, small
+   body, section-ref label) needs to scale up significantly in AR to
+   keep visual parity with the dominant Arabic headlines.
+   Latin labels inside a mono span (FIG 0.1, LIVE v2.04, etc.) still
+   bump — they go 11→17px in AR. That's an aggressive jump but it
+   maintains hierarchy with the now-larger Arabic mono labels. */
+html[lang="ar"] .t-mono-sm {
+  font-size: 17px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+html[lang="ar"] .t-mono {
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+/* SectionRef label — translatable post-em-dash text. Bumped harder
+   so '1.0 — ما هو نَشْر' reads with the Arabic label feeling
+   substantial next to the LTR mono prefix. */
+html[lang="ar"] .section-ref-label {
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+/* Handover column labels (Process section) — render mono-uppercase in
+   EN and as a proper section subhead in AR. */
+html[lang="en"] .handover-label {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+html[lang="ar"] .handover-label {
+  font-family: var(--font-arabic), "IBM Plex Sans Arabic", sans-serif;
+  font-size: 22px;
+  letter-spacing: 0;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
 
 /* ============================================================
  * Layout primitives
@@ -346,22 +393,6 @@ html.lenis, html.lenis body { height: auto; }
 .hero-guides > .g-25 { left: 25%; background: rgba(255, 255, 255, 0.05); }
 .hero-guides > .g-75 { left: 75%; background: rgba(255, 255, 255, 0.05); }
 
-/* Section watermark — large faded numeral behind section content */
-.section-watermark {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: var(--font-sans), sans-serif;
-  font-size: clamp(180px, 22vw, 320px);
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.02);
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-}
 
 /* Dot grid — used behind §03 */
 .dot-grid {
@@ -386,6 +417,24 @@ html.lenis, html.lenis body { height: auto; }
 .status-badge.is-active {
   background: rgba(164, 143, 96, 0.10);
   color: var(--gold-bright);
+}
+
+/* Section ref label — per-locale font + sizing.
+   The "1.0 —" prefix stays mono+LTR; this targets the label after it. */
+html[lang="en"] .section-ref-label {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+html[lang="ar"] .section-ref-label {
+  font-family: var(--font-arabic), "IBM Plex Sans Arabic", sans-serif;
+  font-size: 15px;
+  letter-spacing: 0;
+  line-height: 1.4;
+  color: var(--fg-muted);
 }
 
 /* Sticky section label — used in the left col of section shells */

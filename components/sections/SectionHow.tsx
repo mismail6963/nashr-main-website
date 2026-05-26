@@ -223,9 +223,9 @@ function SplitColumn({
         paddingInlineEnd: !border ? "clamp(20px, 3vw, 48px)" : undefined,
       }}
     >
-      <Mono size={11} tone="muted">
+      <span className="handover-label text-[var(--fg-muted)]">
         {label}
-      </Mono>
+      </span>
       <ul className="mt-6 space-y-3">
         {items.map((item, i) => (
           <li

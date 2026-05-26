@@ -25,6 +25,10 @@ export function SmoothScroll() {
       smoothWheel: true,
     });
 
+    // Expose the instance so modals / overlays can stop+start scrolling.
+    // BriefModal calls .stop() on open and .start() on close.
+    (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+
     let rafId = 0;
     const raf = (time: number) => {
       lenis.raf(time);
@@ -35,6 +39,7 @@ export function SmoothScroll() {
     return () => {
       cancelAnimationFrame(rafId);
       lenis.destroy();
+      (window as unknown as { __lenis?: Lenis }).__lenis = undefined;
     };
   }, []);
 
