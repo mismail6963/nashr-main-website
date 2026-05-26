@@ -66,12 +66,21 @@ export function SectionCTA() {
                   "data-cal-config": CAL.config,
                 }
               : {};
+          // Per-tile a11y label so screen readers describe the destination
+          // rather than just reading the channel name.
+          const ariaLabel =
+            i === 0
+              ? undefined // Book a call: opens popup; channel name is descriptive enough
+              : i === 1
+                ? "Open WhatsApp chat with NASHR"
+                : undefined; // Email: mailto is announced natively
           return (
             <Reveal key={i} delay={0.05 + i * 0.05}>
               <a
                 href={hrefs[i]}
                 {...ext}
                 {...calAttrs}
+                aria-label={ariaLabel}
                 className="group block relative h-full bg-[var(--bg-card)] border border-[var(--border)] hover:border-[var(--gold)]/40 hover:bg-[var(--bg-elevated)] transition-colors duration-200 p-8 md:p-10 min-h-[240px] flex flex-col overflow-hidden"
               >
                 {/* Icon — absolute at logical START corner (top-left LTR / top-right RTL) */}
