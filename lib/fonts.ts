@@ -11,6 +11,12 @@ export const fontSans = localFont({
   weight: "100 900",
   style: "normal",
   preload: true,
+  // Make the metric-adjusted fallback explicit. Next.js generates a
+  // size-adjusted @font-face for Arial to match Inter Tight's metrics
+  // so any brief fallback render before the woff2 lands does NOT cause
+  // a layout shift when the real font swaps in. Critical for the giant
+  // 96px+ display headline.
+  adjustFontFallback: "Arial",
 });
 
 export const fontMono = localFont({
