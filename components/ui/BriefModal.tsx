@@ -231,7 +231,7 @@ export function BriefModal({ isOpen, onClose }: Props) {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center"
+          className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -241,7 +241,7 @@ export function BriefModal({ isOpen, onClose }: Props) {
           <div
             aria-hidden
             onClick={onClose}
-            className="absolute inset-0"
+            className="absolute inset-0 pointer-events-auto"
             style={{
               background: "rgba(8, 9, 10, 0.8)",
               backdropFilter: "blur(8px)",
@@ -255,11 +255,12 @@ export function BriefModal({ isOpen, onClose }: Props) {
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
+            onClick={(e) => e.stopPropagation()}
             initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
             animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1 }}
             exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.25, ease: EASE_OUT_EXPO }}
-            className="relative max-w-[560px] w-[calc(100%-32px)] max-h-[90vh] overflow-y-auto rounded-lg border border-[var(--border)] bg-[var(--bg-card)] p-8 md:p-12"
+            className="relative z-[101] max-w-[560px] w-[calc(100%-32px)] max-h-[90vh] overflow-y-auto overscroll-contain rounded-lg border border-[var(--border)] bg-[var(--bg-card)] p-8 md:p-12 pointer-events-auto"
           >
             {/* Close button */}
             <button
