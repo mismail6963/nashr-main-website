@@ -134,6 +134,7 @@ export function HeroVisual() {
         <figcaption className="mt-4 text-center">
           <span
             dir="ltr"
+            lang="en"
             className="font-mono t-mono-sm uppercase text-[var(--fg-faint)]"
             style={{ fontFamily: "var(--font-mono), monospace" }}
           >
