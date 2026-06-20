@@ -1,12 +1,13 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { SectionShell } from "@/components/ui/SectionShell";
 import { Mono } from "@/components/ui/Mono";
 import { Reveal } from "@/components/motion/Reveal";
 import { SplitText } from "@/components/motion/SplitText";
+import { useReveal } from "@/components/motion/useReveal";
 import { EASE_OUT_QUINT } from "@/lib/motion";
 
 type Step = { num: string; title: string; body: string };
@@ -83,7 +84,7 @@ function ChatThread({
   clientPrompts: string[];
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-15%" });
+  const inView = useReveal(ref, { once: true, margin: "-15%" });
   const reduce = useReducedMotion();
 
   // Build the 12-turn sequence as {from, payload}
