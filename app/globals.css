@@ -254,10 +254,14 @@ html[lang="ar"] .handover-label {
   border-top: 1px solid var(--border-strong);
 }
 
-/* Performance: defer below-the-fold rendering */
+/* NOTE: `content-visibility: auto` was removed here. It renders an empty
+   placeholder box for off-screen sections (their structure shows but their
+   content is not rendered) and interferes with the IntersectionObserver-based
+   scroll reveals on engines that support it — together that left some devices
+   seeing the section layout with no content inside. Eager rendering is
+   negligible for a 5-section page and the visual result is identical. */
 .below-fold {
-  content-visibility: auto;
-  contain-intrinsic-size: 1000px 800px;
+  /* intentionally empty — kept so existing markup needs no change */
 }
 
 /* ============================================================

@@ -1,8 +1,9 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { Fragment, type ReactNode } from "react";
+import { Fragment, useRef, type ReactNode } from "react";
 import { EASE_OUT_QUINT } from "@/lib/motion";
+import { useReveal } from "@/components/motion/useReveal";
 
 type Word = string | { text: string; accent?: boolean };
 
@@ -48,6 +49,11 @@ export function SplitText({
 }: Props) {
   const reduce = useReducedMotion();
   const Tag = motion[as] as typeof motion.h1;
+  const ref = useRef<HTMLHeadingElement>(null);
+  // Scroll-in headlines reveal via the reliable hook; `onMount` headlines (the
+  // hero) animate immediately. Either way the words always reach their visible
+  // state, so a missed observer never leaves a headline blank.
+  const shown = useReveal(ref);
 
   // If `text` was provided instead of `words`, auto-split on whitespace.
   const resolvedWords: Word[] = words ?? (text ? text.split(/\s+/) : []);
@@ -76,13 +82,12 @@ export function SplitText({
 
   return (
     <Tag
+      ref={ref}
       className={className}
       style={style}
       aria-label={ariaLabel}
       initial="hidden"
-      animate={onMount ? "visible" : undefined}
-      whileInView={onMount ? undefined : "visible"}
-      viewport={onMount ? undefined : { once: true, margin: "-10% 0px" }}
+      animate={onMount || shown ? "visible" : "hidden"}
     >
       <span className="sr-only">{ariaLabel}</span>
       {resolvedWords.map((w, i) => {
