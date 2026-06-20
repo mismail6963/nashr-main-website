@@ -115,6 +115,24 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={dir} className={fontClass}>
       <body>
+        {/* Asset-delivery recovery. Runs first so its listeners are attached
+            before the app's chunk <script>s execute.
+            (a) If a first-party /_next/static asset fails to load (a dead hash
+                from a stale HTML shell after a redeploy, a blocked request, a
+                transient drop), reload once to fetch fresh HTML pointing at the
+                current hashes — otherwise one 404'd chunk freezes the whole app.
+            (b) The app ships NO service worker; if a device still holds a legacy
+                one it can serve dead asset references, so unregister it, clear
+                its caches, and reload once so the device self-heals.
+            sessionStorage guards (try/caught for Safari Private mode) cap this
+            at a single reload and clear on a clean load. No effect when assets
+            load normally, so the rendered result is unchanged. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){var R=/Loading chunk|ChunkLoadError|Importing a module script failed|module script failed|dynamically imported module/i;function reloadOnce(k){try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');}catch(e){}location.reload();}window.addEventListener('error',function(e){var t=e&&e.target;if(t&&(t.tagName==='SCRIPT'||t.tagName==='LINK')){var u=t.src||t.href||'';if(u.indexOf('/_next/static/')!==-1){reloadOnce('__nashr_asset_reload');return;}}var m=(e&&(e.message||(e.error&&e.error.message)))||'';if(R.test(m))reloadOnce('__nashr_chunk_reload');},true);window.addEventListener('unhandledrejection',function(e){var r=e&&e.reason;if(R.test((r&&(r.message||r))+''))reloadOnce('__nashr_chunk_reload');});window.addEventListener('load',function(){try{sessionStorage.removeItem('__nashr_asset_reload');sessionStorage.removeItem('__nashr_chunk_reload');}catch(e){}});try{if('serviceWorker' in navigator&&navigator.serviceWorker.getRegistrations){navigator.serviceWorker.getRegistrations().then(function(rs){if(!rs||!rs.length)return;rs.forEach(function(r){r.unregister();});if(window.caches&&caches.keys){caches.keys().then(function(ks){ks.forEach(function(k){caches.delete(k);});}).catch(function(){});}reloadOnce('__nashr_sw_reload');}).catch(function(){});}}catch(e){}})();",
+          }}
+        />
         {/* Runtime polyfills for older Safari/iOS. Runs synchronously before
             the deferred app bundle so any code path using these methods is
             safe. Array/String.prototype.at landed only in Safari 15.4. */}
