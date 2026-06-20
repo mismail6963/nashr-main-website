@@ -12,6 +12,12 @@ export function SmoothScroll() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    // Hydration beacon — signals to the blank-page failsafe (inline script in
+    // the root layout) that the client bundle parsed and React mounted. If a
+    // script error on an old browser aborts hydration, this never runs and the
+    // failsafe reveals the content that `motion` server-rendered at opacity:0.
+    (window as unknown as { __appHydrated?: boolean }).__appHydrated = true;
+
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
 

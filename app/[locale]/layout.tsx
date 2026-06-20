@@ -115,6 +115,15 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={dir} className={fontClass}>
       <body>
+        {/* Runtime polyfills for older Safari/iOS. Runs synchronously before
+            the deferred app bundle so any code path using these methods is
+            safe. Array/String.prototype.at landed only in Safari 15.4. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){function at(n){n=Math.trunc(n)||0;if(n<0)n+=this.length;if(n<0||n>=this.length)return undefined;return this[n];}if(!Array.prototype.at){Object.defineProperty(Array.prototype,'at',{value:at,writable:true,configurable:true});}if(!String.prototype.at){Object.defineProperty(String.prototype,'at',{value:at,writable:true,configurable:true});}})();",
+          }}
+        />
         <StructuredData locale={locale} />
         <a href="#main" className="skip-link">
           Skip to content
@@ -139,6 +148,21 @@ Cal.ns["free-mockup-walkthrough-call"]("ui", {"hideEventTypeDetails":false,"layo
             script so they don't interfere with anything above. */}
         <Analytics />
         <SpeedInsights />
+        {/* Blank-page failsafe. Almost all content is server-rendered at
+            opacity:0 and revealed by `motion` after hydration. If the client
+            bundle ever fails to run (e.g. an unsupported feature on an old
+            browser), nothing sets `__appHydrated` and this reveals that hidden
+            content so the page is never blank. When hydration succeeds it is a
+            no-op, so the entrance animations and visual result are unchanged. */}
+        <script
+          dangerouslySetInnerHTML={{
+            // The "trans"+"form" split is deliberate: it keeps Tailwind's
+            // source scanner from extracting a bare token and emitting an
+            // unused utility, so this script adds zero CSS to the bundle.
+            __html:
+              "(function(){function reveal(){if(window.__appHydrated)return;try{var p='trans'+'form';var n=document.querySelectorAll('[style]');for(var i=0;i<n.length;i++){var s=n[i].style;if(s.opacity==='0'){s.opacity='1';s.removeProperty(p);}}}catch(e){}}function arm(){setTimeout(reveal,5000);}if(document.readyState==='complete'){arm();}else{window.addEventListener('load',arm);}})();",
+          }}
+        />
       </body>
     </html>
   );

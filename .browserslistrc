@@ -1,0 +1,22 @@
+# Explicit build targets for JS transpilation (SWC).
+#
+# These widen the compilation target so Next.js/SWC lowers modern syntax
+# (optional chaining ?., nullish coalescing ??, logical assignment ??=/||=/&&=,
+# private class fields) down to syntax that older Safari / iOS Safari can parse.
+# Combined with `transpilePackages` in next.config.ts, this makes the app code
+# AND the bundled dependencies (motion, lenis, etc.) safe to load on older
+# WebKit, which is the root cause of the page failing to load on some devices.
+#
+# Note on CSS: Tailwind v4's Lightning CSS does read these targets, but the
+# only resulting change is that it emits `vertical-align: initial` instead of
+# `vertical-align: baseline` in a few reset/utility rules. `baseline` IS the
+# initial value of `vertical-align`, so the two are identical and the rendered
+# design is unchanged. No utilities, colors, spacing, or layout are affected.
+chrome >= 64
+edge >= 79
+firefox >= 67
+opera >= 51
+safari >= 12
+ios_saf >= 12
+samsung >= 9
+and_chr >= 64
