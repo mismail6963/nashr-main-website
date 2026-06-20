@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "motion/react";
 import {
@@ -12,8 +13,16 @@ import {
 import { SectionShell } from "@/components/ui/SectionShell";
 import { Reveal } from "@/components/motion/Reveal";
 import { SplitText } from "@/components/motion/SplitText";
-import { BriefModal } from "@/components/ui/BriefModal";
 import { getContactLinks, CAL } from "@/lib/contact";
+
+// Code-split: the brief form (portal + form + framer-motion + icons) only ever
+// renders after a click and is null on the server, so keep it out of the
+// initial bundle and fetch its chunk on demand. Purely a load-time change —
+// the rendered output is identical.
+const BriefModal = dynamic(
+  () => import("@/components/ui/BriefModal").then((m) => m.BriefModal),
+  { ssr: false },
+);
 
 type Tile = { channel: string; body: string; cta: string };
 
