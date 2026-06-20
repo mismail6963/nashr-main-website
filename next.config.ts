@@ -27,8 +27,13 @@ const nextConfig: NextConfig = {
         source: "/((?!_next/|api/|.*\\..*).*)",
         headers: [
           {
+            // Browser: revalidate every visit so it can never reference a dead
+            // asset hash (the Safari stale-shell fix). CDN: cache the static
+            // HTML at the edge for all users (s-maxage) — Vercel purges the
+            // edge on each deploy, so this stays both fast AND never stale. The
+            // browser's revalidation is answered fast by the nearby edge.
             key: "Cache-Control",
-            value: "public, max-age=0, must-revalidate",
+            value: "public, max-age=0, must-revalidate, s-maxage=31536000",
           },
         ],
       },
