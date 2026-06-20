@@ -22,6 +22,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { X, Check, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CONTACT } from "@/lib/contact";
+import { reportDiag } from "@/lib/diag";
 
 type Props = {
   isOpen: boolean;
@@ -212,6 +213,12 @@ export function BriefModal({ isOpen, onClose }: Props) {
     } catch (err) {
       setStatus("error");
       setSubmitError(err instanceof Error ? err.message : "Submission failed");
+      // Surface a blocked/failed POST (ITP, content blocker, network) instead
+      // of it disappearing into the generic error state.
+      reportDiag(
+        "brief-fetch",
+        err instanceof Error ? err.message : "brief submission failed",
+      );
     }
   };
 
